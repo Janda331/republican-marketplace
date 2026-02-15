@@ -12,9 +12,10 @@ export default async function CategoryPage({ params }: Props) {
   const { slug } = await params; // ✅ this is the key fix
 
   const { data: listings, error } = await supabase
-    .from("listings")
-    .select("*")
-    .eq("category_slug", slug); // ✅ match your DB column
+  .from("listings")
+  .select("*")
+  .eq("category_slug", slug)
+  .eq("status", "active");
 
   if (error) {
     console.error("Supabase error:", error);
