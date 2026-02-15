@@ -21,14 +21,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
 
           <nav className="rm-actions">
-            <a className="rm-btn rm-btnGhost" href="/vendor">
-              Become a Vendor
+            <a className="rm-btn rm-btnGhost" href="/signup">
+              Sign Up
             </a>
-            <a className="rm-btn rm-btnGhost" href="/vendor">
-              List a Service
-            </a>
-            <a className="rm-btn rm-btnPrimary" href="/login">
+
+            <a className="rm-btn rm-btnGhost" href="/signin">
               Sign In
+            </a>
+
+            <a className="rm-btn rm-btnPrimary" href="/vendor">
+              List a Service
             </a>
           </nav>
         </header>

@@ -236,3 +236,30 @@
   border-color: rgba(17, 24, 39, 0.35);
   box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
 }
+.rm-input{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: inherit;
+  outline: none;
+}
+
+.rm-btn{
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.12);
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rm-btn:hover{
+  background: rgba(255,255,255,0.18);
+}
+
+.rm-btn-ghost{
+  background: transparent;
+}
