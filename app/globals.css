@@ -222,3 +222,17 @@
 .rm-cta:hover {
   background: #0b1220;
 }
+.rm-input {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(17, 24, 39, 0.15);
+  background: #ffffff;
+  padding: 12px 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.rm-input:focus {
+  border-color: rgba(17, 24, 39, 0.35);
+  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
+}

@@ -1,4 +1,15 @@
-export default function Home() {
+import { supabase } from "../lib/supabaseclient";
+
+export default async function Home() {
+  // 🔎 Supabase connection test
+  const { data, error } = await supabase
+    .from("listings")
+    .select("*")
+    .limit(1);
+
+  console.log("SUPABASE TEST data:", data);
+  console.log("SUPABASE TEST error:", error);
+
   return (
     <div className="rm-card">
       <div>
