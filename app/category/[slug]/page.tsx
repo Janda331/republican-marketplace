@@ -26,24 +26,46 @@ export default function CategoryPage({ params }: Props) {
       </h1>
 
       {/* 3 column grid with bigger gaps */}
-<div className="grid grid-cols-3 gap-x-10 gap-y-10">
+<div
+  className="
+    w-full
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    xl:grid-cols-3
+    gap-8
+    justify-items-center
+  "
+>
   {listings.map((listing) => (
     <div
       key={listing.id}
-      className="rounded-xl border bg-white p-6 shadow-sm transition hover:shadow-lg
-                 min-h-[320px] flex flex-col justify-between"
+      className="
+        w-full
+        max-w-[300px]
+        aspect-[3/4]
+        rounded-xl
+        border
+        bg-white
+        p-6
+        shadow-md
+        hover:shadow-xl
+        transition
+        flex
+        flex-col
+        justify-between
+      "
     >
       <div>
-        <h2 className="mb-2 text-xl font-semibold">{listing.title}</h2>
-        <p className="text-gray-600">{listing.price}</p>
-
-        {/* placeholder description to make the card feel like a real listing */}
-        <p className="mt-4 text-sm text-gray-500">
-          Short description goes here. Packages can vary by scope and timeline.
+        <h2 className="text-lg font-semibold mb-2">
+          {listing.title}
+        </h2>
+        <p className="text-gray-600">
+          {listing.price}
         </p>
       </div>
 
-      <button className="mt-6 w-full rounded bg-black px-4 py-3 text-white hover:bg-gray-800">
+      <button className="w-full rounded bg-black px-4 py-2 text-white hover:bg-gray-800">
         View Details
       </button>
     </div>
