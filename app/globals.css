@@ -1,3 +1,224 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* === Marketplace App Shell === */
+.rm-body {
+  background: #f3f4f6; /* light gray */
+  color: #111827;
+  min-height: 100vh;
+}
+
+/* Top bar */
+.rm-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.rm-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  text-decoration: none;
+  color: inherit;
+}
+
+.rm-logoMark {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #111827;
+  display: inline-block;
+}
+
+.rm-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  user-select: none;
+}
+
+.rm-btnGhost {
+  border: 1px solid rgba(17, 24, 39, 0.15);
+  background: #ffffff;
+  color: #111827;
+}
+
+.rm-btnGhost:hover {
+  background: #f9fafb;
+}
+
+.rm-btnPrimary {
+  background: #111827;
+  color: #ffffff;
+  border: 1px solid #111827;
+}
+
+.rm-btnPrimary:hover {
+  background: #0b1220;
+}
+
+/* Shell: sidebar + main */
+.rm-shell {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 0;
+  width: 100%;
+  min-height: calc(100vh - 56px);
+}
+
+.rm-sidebar {
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  background: #ffffff;
+  border-right: 1px solid rgba(17, 24, 39, 0.12);
+  padding: 16px;
+}
+
+.rm-sideTitle {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.55);
+  margin-bottom: 12px;
+}
+
+.rm-sideList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rm-sideItem {
+  text-decoration: none;
+  color: inherit;
+  border-radius: 18px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #ffffff;
+  padding: 14px 14px;
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.06);
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.rm-sideItem:hover {
+  background: #f9fafb;
+  box-shadow: 0 6px 16px rgba(17, 24, 39, 0.10);
+  transform: translateY(-1px);
+}
+
+.rm-sideItemTitle {
+  font-weight: 800;
+}
+
+.rm-sideItemSub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(17, 24, 39, 0.6);
+}
+
+/* Main is intentionally NOT max-width constrained */
+.rm-main {
+  width: 100%;
+  padding: 20px;
+}
+
+/* === Listing grid rules you asked for ===
+   Desktop: 3 per row
+   Mobile: 1 per row
+   Real gaps
+   Rounded corners
+*/
+.rm-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px; /* real open gap */
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+  .rm-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Desktop: 3 columns (this is what you demanded) */
+@media (min-width: 1024px) {
+  .rm-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Card styling */
+.rm-card {
+  background: #ffffff;
+  border-radius: 22px; /* rounded edges */
+  border: 1px solid rgba(17, 24, 39, 0.10);
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.06);
+  padding: 18px;
+  min-height: 360px; /* taller feel */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.rm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.12);
+}
+
+.rm-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 800;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.rm-muted {
+  color: rgba(17, 24, 39, 0.65);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rm-cta {
+  width: 100%;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #111827;
+  color: white;
+  font-weight: 800;
+  border: 1px solid #111827;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.rm-cta:hover {
+  background: #0b1220;
+}

@@ -1,76 +1,58 @@
 type Props = {
-  params: { slug?: string };
+  params: Promise<{ slug: string }>;
 };
 
-function titleFromSlug(slug?: string) {
-  if (!slug) return "Category";
+function titleFromSlug(slug: string) {
   return slug.replace(/-/g, " ");
 }
 
-export default function CategoryPage({ params }: Props) {
-  const categoryTitle = titleFromSlug(params?.slug);
+export default async function CategoryPage({ params }: Props) {
+  const { slug } = await params;
+  const categoryTitle = titleFromSlug(slug);
 
-  const listings = [
-    { id: 1, title: "Premium Package", price: "$1200" },
-    { id: 2, title: "Standard Package", price: "$800" },
-    { id: 3, title: "Basic Package", price: "$500" },
-    { id: 4, title: "Enterprise Plan", price: "$2500" },
-    { id: 5, title: "Starter Plan", price: "$300" },
-    { id: 6, title: "Campaign Bundle", price: "$1500" },
-  ];
+  const listings = Array.from({ length: 12 }).map((_, i) => ({
+    id: i + 1,
+    title: `Listing ${i + 1}`,
+    vendor: "Vendor Name",
+    price: `$${500 + i * 50}–$${1200 + i * 80}`,
+    description:
+      "Short description that will later come from the database. This card is intentionally tall, rounded, and separated by real gaps.",
+  }));
 
   return (
-    <div className="w-full p-8">
-      <h1 className="mb-8 text-3xl font-bold capitalize">
-        {categoryTitle}
-      </h1>
-
-      {/* 3 column grid with bigger gaps */}
-<div
-  className="
-    w-full
-    grid
-    grid-cols-1
-    md:grid-cols-2
-    xl:grid-cols-3
-    gap-8
-    justify-items-center
-  "
->
-  {listings.map((listing) => (
-    <div
-      key={listing.id}
-      className="
-        w-full
-        max-w-[300px]
-        aspect-[3/4]
-        rounded-xl
-        border
-        bg-white
-        p-6
-        shadow-md
-        hover:shadow-xl
-        transition
-        flex
-        flex-col
-        justify-between
-      "
-    >
-      <div>
-        <h2 className="text-lg font-semibold mb-2">
-          {listing.title}
-        </h2>
-        <p className="text-gray-600">
-          {listing.price}
-        </p>
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <h1 style={{ fontSize: 28, fontWeight: 900, textTransform: "capitalize" }}>
+          {categoryTitle}
+        </h1>
+        <p className="rm-muted">Desktop must be 3 per row. Mobile must be 1 per row.</p>
       </div>
 
-      <button className="w-full rounded bg-black px-4 py-2 text-white hover:bg-gray-800">
-        View Details
-      </button>
-    </div>
-  ))}
-</div>
+      <div className="rm-grid">
+        {listings.map((l) => (
+          <div key={l.id} className="rm-card">
+            <div>
+              <div className="rm-muted" style={{ fontWeight: 800, fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                {l.vendor}
+              </div>
+
+              <div style={{ marginTop: 10, fontSize: 20, fontWeight: 900 }}>
+                {l.title}
+              </div>
+
+              <div style={{ marginTop: 10 }}>
+                <span className="rm-pill">{l.price}</span>
+              </div>
+
+              <p className="rm-muted" style={{ marginTop: 14 }}>
+                {l.description}
+              </p>
+            </div>
+
+            <button className="rm-cta">View Details</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
