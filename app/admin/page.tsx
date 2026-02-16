@@ -1,8 +1,12 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseclient";
-
+const ADMIN_EMAILS = new Set([
+  "ryleyniemi@gmail.com",
+  "niemi2040@gmail.com",
+  "therepublicanmarketplace@gmail.com",
+]);
 type Listing = {
   id: string;
   created_at?: string;
@@ -16,6 +20,7 @@ type Listing = {
 };
 
 export default function AdminPage() {
+    const router = useRouter();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
@@ -43,26 +48,43 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    loadPending();
-  }, []);
+  (async () => {
+    const { data } = await supabase.auth.getSession();
+    const user = data.session?.user;
 
-  async function setStatus(id: string, status: "active" | "archived") {
-    setMessage(null);
-
-    const { error } = await supabase
-      .from("listings")
-      .update({ status })
-      .eq("id", id);
-
-    if (error) {
-      console.error("Update status error:", error);
-      setMessage(error.message);
+    if (!user) {
+      router.replace("/signin");
       return;
     }
 
-    // remove from UI immediately
-    setListings((prev) => prev.filter((l) => l.id !== id));
+    const email = user.email?.toLowerCase() || "";
+    if (!ADMIN_EMAILS.has(email)) {
+      setMessage("Not authorized.");
+      setLoading(false);
+      return;
+    }
+
+    loadPending();
+  })();
+}, []);
+
+  async function setStatus(id: string, status: "approved" | "rejected") {
+  setMessage(null);
+
+  const { error } = await supabase
+    .from("listings")
+    .update({ status })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Update status error:", error);
+    setMessage(error.message);
+    return;
   }
+
+  // remove from UI immediately
+  setListings((prev) => prev.filter((l) => l.id !== id));
+    }
 
   return (
     <div>
@@ -131,16 +153,16 @@ export default function AdminPage() {
 
               <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
                 <button
-                  className="rm-cta"
-                  onClick={() => setStatus(l.id, "active")}
-                  style={{ flex: 1 }}
+                className="rm-cta"
+                onClick={() => setStatus(l.id, "approved")}
+                style={{ flex: 1 }}
                 >
-                  Approve (Active)
+                Approve
                 </button>
 
                 <button
-                  onClick={() => setStatus(l.id, "archived")}
-                  style={{
+                onClick={() => setStatus(l.id, "rejected")}
+                style={{
                     flex: 1,
                     borderRadius: 14,
                     padding: "12px 14px",
@@ -149,9 +171,9 @@ export default function AdminPage() {
                     fontWeight: 900,
                     border: "1px solid rgba(17,24,39,0.15)",
                     cursor: "pointer",
-                  }}
+                }}
                 >
-                  Reject (Archive)
+                Reject
                 </button>
               </div>
             </div>

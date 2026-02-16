@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseclient";
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>; // ✅ Next 16 style
 };
 
 function titleFromSlug(slug: string) {
@@ -9,17 +9,19 @@ function titleFromSlug(slug: string) {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const { slug } = await params; // ✅ this is the key fix
+  const { slug } = await params; // ✅ THIS is the key fix
+
+  if (!slug) {
+    return <div className="rm-card">Invalid category (missing slug)</div>;
+  }
 
   const { data: listings, error } = await supabase
-  .from("listings")
-  .select("*")
-  .eq("category_slug", slug)
-  .eq("status", "active");
+    .from("listings")
+    .select("*")
+    .eq("category_slug", slug)
+    .eq("status", "approved");
 
-  if (error) {
-    console.error("Supabase error:", error);
-  }
+  if (error) console.error("Supabase error:", error);
 
   return (
     <div>
@@ -27,7 +29,6 @@ export default async function CategoryPage({ params }: Props) {
         {titleFromSlug(slug)}
       </h1>
 
-      {/* 3 columns desktop, 1 column mobile, with gaps */}
       <div className="rm-grid">
         {listings && listings.length > 0 ? (
           listings.map((listing: any) => (
@@ -39,18 +40,15 @@ export default async function CategoryPage({ params }: Props) {
                 <p className="rm-muted" style={{ marginTop: 10 }}>
                   {listing.description}
                 </p>
-                {listing.price ? (
-                  <div style={{ marginTop: 12 }}>
-                    <span className="rm-pill">{listing.price}</span>
-                  </div>
-                ) : null}
               </div>
 
-              <button className="rm-cta">View Details</button>
+              <a className="rm-cta" href={`/listing/${listing.id}`}>
+                View Details
+              </a>
             </div>
           ))
         ) : (
-          <div className="rm-muted">No listings yet in this category.</div>
+          <div className="rm-muted">No approved listings yet in this category.</div>
         )}
       </div>
     </div>
