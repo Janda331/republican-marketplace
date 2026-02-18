@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseclient";
-
+import AuthGate from "./AuthGate";
+import RequestPurchaseButton from "./RequestPurchaseButton";
 type Props = {
   params: Promise<{ id: string }>;
 };
@@ -11,32 +12,16 @@ export default async function ListingDetailPage({ params }: Props) {
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData.session;
 
-  if (!session?.user) {
-    return (
-      <div className="rm-card" style={{ maxWidth: 760 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 8 }}>
-          Sign in to view listing details
-        </h1>
-        <p className="rm-muted">
-          You can browse listings as a viewer, but details require an account.
-        </p>
-
-        <div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
-          <a className="rm-btn rm-btnPrimary" href="/signup">Sign Up</a>
-          <a className="rm-btn rm-btnGhost" href="/signin">Sign In</a>
-          <a className="rm-btn rm-btnGhost" href="/">Back Home</a>
-        </div>
-      </div>
-    );
-  }
+  
 
   // 2) Signed in: load listing
   // If your listings.id is numeric, change `.eq("id", id)` to `.eq("id", Number(id))`
   const { data: listing, error } = await supabase
-    .from("listings")
-    .select("*")
-    .eq("id", id)
-    .single();
+  .from("listings")
+  .select("*")
+  .eq("id", id)
+  .eq("status", "approved")
+  .single();
 
   if (error || !listing) {
     return (
@@ -53,49 +38,49 @@ export default async function ListingDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="rm-card" style={{ maxWidth: 900 }}>
-      <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 10 }}>
-        {listing.title}
-      </h1>
+    <AuthGate>
+      <div className="rm-card" style={{ maxWidth: 900 }}>
+        <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 10 }}>
+          {listing.title}
+        </h1>
 
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
-        {listing.category_slug ? <span className="rm-pill">{listing.category_slug}</span> : null}
-        {listing.status ? <span className="rm-pill">{listing.status}</span> : null}
-        {listing.vendor_name ? <span className="rm-pill">{listing.vendor_name}</span> : null}
-      </div>
-
-      {listing.price_min != null || listing.price_max != null ? (
-        <div style={{ marginBottom: 12 }}>
-          <span className="rm-pill">
-            ${listing.price_min ?? "?"} – ${listing.price_max ?? "?"}
-          </span>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
+          {listing.category_slug ? <span className="rm-pill">{listing.category_slug}</span> : null}
+          {listing.status ? <span className="rm-pill">{listing.status}</span> : null}
+          {listing.vendor_name ? <span className="rm-pill">{listing.vendor_name}</span> : null}
         </div>
-      ) : null}
 
-      {listing.description ? (
-        <p className="rm-muted" style={{ whiteSpace: "pre-wrap" }}>
-          {listing.description}
-        </p>
-      ) : (
-        <p className="rm-muted">No description provided.</p>
-      )}
+        {listing.price_min != null || listing.price_max != null ? (
+          <div style={{ marginBottom: 12 }}>
+            <span className="rm-pill">
+              ${listing.price_min ?? "?"} – ${listing.price_max ?? "?"}
+            </span>
+          </div>
+        ) : null}
 
-      <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
-        <a
-          className="rm-btn rm-btnGhost"
-          href={listing.category_slug ? `/category/${listing.category_slug}` : "/"}
-        >
-          Back to Category
-        </a>
+        {listing.description ? (
+          <p className="rm-muted" style={{ whiteSpace: "pre-wrap" }}>
+            {listing.description}
+          </p>
+        ) : (
+          <p className="rm-muted">No description provided.</p>
+        )}
 
-        <a className="rm-btn rm-btnGhost" href="/">
-          Back Home
-        </a>
+        <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
+          <a
+            className="rm-btn rm-btnGhost"
+            href={listing.category_slug ? `/category/${listing.category_slug}` : "/"}
+          >
+            Back to Category
+          </a>
 
-        <button className="rm-btn rm-btnPrimary" type="button" disabled>
-          Purchase (Coming Soon)
-        </button>
+          <a className="rm-btn rm-btnGhost" href="/">
+            Back Home
+          </a>
+
+          <RequestPurchaseButton listingId={listing.id} />
+        </div>
       </div>
-    </div>
+    </AuthGate>
   );
 }

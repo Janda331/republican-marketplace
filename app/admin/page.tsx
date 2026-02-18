@@ -71,10 +71,12 @@ export default function AdminPage() {
   async function setStatus(id: string, status: "approved" | "rejected") {
   setMessage(null);
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("listings")
     .update({ status })
-    .eq("id", id);
+    .eq("id", id)
+    .select("id,status") // ✅ force a returned row
+    .single();
 
   if (error) {
     console.error("Update status error:", error);
@@ -82,9 +84,17 @@ export default function AdminPage() {
     return;
   }
 
+  // ✅ If RLS blocks it, you often get no row back
+  if (!data) {
+    setMessage("No row updated (likely blocked by RLS).");
+    return;
+  }
+
   // remove from UI immediately
   setListings((prev) => prev.filter((l) => l.id !== id));
     }
+
+ 
 
   return (
     <div>
