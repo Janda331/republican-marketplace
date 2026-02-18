@@ -96,40 +96,65 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
 
           <nav className="rm-actions">
-            {loadingUser ? (
-              <div className="rm-muted" style={{ fontWeight: 800 }}>
-                Loading…
+          {loadingUser ? (
+            <div className="rm-muted" style={{ fontWeight: 800 }}>
+              Loading…
+            </div>
+          ) : !userEmail ? (
+            <>
+              <a className="rm-btn rm-btnGhost" href="/signup">
+                Sign Up
+              </a>
+
+              <a className="rm-btn rm-btnGhost" href="/signin">
+                Sign In
+              </a>
+
+              <a className="rm-btn rm-btnPrimary" href="/vendor">
+                List a Service
+              </a>
+            </>
+          ) : (
+            <>
+              {/* Signed-in identity */}
+              <div className="rm-muted" style={{ fontWeight: 900 }}>
+                Signed in: {userEmail}
               </div>
-            ) : !userEmail ? (
-              <>
-                <a className="rm-btn rm-btnGhost" href="/signup">
-                  Sign Up
+
+              <span className="rm-pill">{(role ?? "customer").toUpperCase()}</span>
+
+              {/* Customer actions */}
+              <a className="rm-btn rm-btnGhost" href="/account/orders">
+                My Orders
+              </a>
+
+              {/* Vendor actions */}
+              {(role === "vendor" || role === "admin") && (
+                <>
+                  <a className="rm-btn rm-btnPrimary" href="/vendor">
+                    List a Service
+                  </a>
+
+                  <a className="rm-btn rm-btnGhost" href="/vendor/orders">
+                    Incoming Orders
+                  </a>
+                </>
+              )}
+
+              {/* Admin actions */}
+              {role === "admin" && (
+                <a className="rm-btn rm-btnGhost" href="/admin">
+                  Admin
                 </a>
+              )}
 
-                <a className="rm-btn rm-btnGhost" href="/signin">
-                  Sign In
-                </a>
+              <button className="rm-btn rm-btnGhost" onClick={logout}>
+                Logout
+              </button>
+            </>
+          )}
+        </nav>
 
-                <a className="rm-btn rm-btnPrimary" href="/vendor">
-                  List a Service
-                </a>
-              </>
-            ) : (
-              <>
-                <div className="rm-muted" style={{ fontWeight: 900 }}>
-                  Signed in: {userEmail}
-                </div>
-
-                <span className="rm-pill">
-                  {(role ?? "customer").toUpperCase()}
-                </span>
-
-                <button className="rm-btn rm-btnGhost" onClick={logout}>
-                  Logout
-                </button>
-              </>
-            )}
-          </nav>
         </header>
 
         {/* App shell */}
