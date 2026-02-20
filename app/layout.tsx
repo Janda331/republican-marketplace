@@ -135,6 +135,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     List a Service
                   </a>
 
+                  <a className="rm-btn rm-btnGhost" href="/vendor/listings">
+                    My Listings
+                  </a>
+
                   <a className="rm-btn rm-btnGhost" href="/vendor/orders">
                     Incoming Orders
                   </a>
