@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseclient";
 import AuthGate from "./AuthGate";
-import RequestPurchaseButton from "./RequestPurchaseButton";
+import CheckoutButton from "./CheckoutButton";
 type Props = {
   params: Promise<{ id: string }>;
 };
@@ -78,7 +78,7 @@ export default async function ListingDetailPage({ params }: Props) {
             Back Home
           </a>
 
-          <RequestPurchaseButton listingId={listing.id} />
+          <CheckoutButton listingId={listing.id} />
         </div>
       </div>
     </AuthGate>
