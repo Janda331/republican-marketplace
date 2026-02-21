@@ -323,3 +323,24 @@
     width: 100%;
   }
 }
+.rm-roleCard {
+  flex: 1;
+  padding: 18px;
+  border-radius: 18px;
+  border: 2px solid rgba(17, 24, 39, 0.15);
+  background: white;
+  cursor: pointer;
+  text-align: left;
+  transition: all 160ms ease;
+}
+
+.rm-roleCard:hover {
+  border-color: rgba(17, 24, 39, 0.35);
+  transform: translateY(-2px);
+}
+
+.rm-roleCardActive {
+  border-color: #111827;
+  background: #f3f4f6;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}

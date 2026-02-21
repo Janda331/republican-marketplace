@@ -71,20 +71,23 @@ export default function SignUpPage() {
         />
 
         <label className="rm-muted">Account type</label>
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: "flex", gap: 16, marginTop: 12 }}>
           <button
             type="button"
-            className={role === "customer" ? "rm-btn" : "rm-btn rm-btn-ghost"}
             onClick={() => setRole("customer")}
+            className={`rm-roleCard ${role === "customer" ? "rm-roleCardActive" : ""}`}
           >
-            Customer
+            <div style={{ fontWeight: 900, fontSize: 18 }}>Customer</div>
+            <div className="rm-muted">Browse & purchase services</div>
           </button>
+
           <button
             type="button"
-            className={role === "vendor" ? "rm-btn" : "rm-btn rm-btn-ghost"}
             onClick={() => setRole("vendor")}
+            className={`rm-roleCard ${role === "vendor" ? "rm-roleCardActive" : ""}`}
           >
-            Vendor
+            <div style={{ fontWeight: 900, fontSize: 18 }}>Vendor</div>
+            <div className="rm-muted">List services & receive orders</div>
           </button>
         </div>
 
