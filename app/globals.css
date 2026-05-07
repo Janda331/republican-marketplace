@@ -31,10 +31,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   padding: 0 16px;
   width: 100%;
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .rm-logo {
@@ -45,6 +47,7 @@ body {
   text-decoration: none;
   color: inherit;
   min-width: 0;
+  flex-shrink: 1;
 }
 
 .rm-logoMark {
@@ -62,6 +65,8 @@ body {
   gap: 10px;
   min-width: 0;
   max-width: 100%;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .rm-btn {
@@ -72,10 +77,7 @@ body {
   padding: 10px 14px;
   font-size: 14px;
   text-decoration: none;
-  transition:
-    transform 120ms ease,
-    box-shadow 120ms ease,
-    background 120ms ease;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
   user-select: none;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.12);
@@ -83,6 +85,7 @@ body {
   font-weight: 700;
   cursor: pointer;
   max-width: 100%;
+  white-space: nowrap;
 }
 
 .rm-btn:hover {
@@ -160,10 +163,7 @@ body {
   background: #ffffff;
   padding: 14px;
   box-shadow: 0 1px 2px rgba(17, 24, 39, 0.06);
-  transition:
-    transform 120ms ease,
-    box-shadow 120ms ease,
-    background 120ms ease;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
   width: 100%;
 }
 
@@ -200,14 +200,12 @@ body {
   max-width: 100%;
 }
 
-/* Tablet */
 @media (min-width: 768px) {
   .rm-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* Desktop */
 @media (min-width: 1024px) {
   .rm-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -225,9 +223,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition:
-    transform 140ms ease,
-    box-shadow 140ms ease;
+  transition: transform 140ms ease, box-shadow 140ms ease;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
@@ -248,6 +244,7 @@ body {
   background: #f3f4f6;
   color: #111827;
   max-width: 100%;
+  white-space: nowrap;
 }
 
 .rm-muted {
@@ -302,9 +299,9 @@ body {
   display: none;
   border: 1px solid rgba(17, 24, 39, 0.12);
   background: white;
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 18px;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 16px;
   font-weight: 900;
   cursor: pointer;
   flex-shrink: 0;
@@ -316,11 +313,62 @@ body {
 
 /* Mobile */
 @media (max-width: 900px) {
+  .rm-topbar {
+    height: 52px;
+    padding: 0 6px;
+    gap: 4px;
+    overflow: hidden;
+    flex-wrap: nowrap;
+  }
+
   .rm-hamburger {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 10px;
+    margin-right: 2px;
+    padding: 6px 8px;
+    font-size: 15px;
+  }
+
+  .rm-logo {
+    gap: 4px;
+    font-size: clamp(8px, 2.35vw, 12px);
+    letter-spacing: -0.04em;
+    overflow: hidden;
+    flex: 1 1 auto;
+  }
+
+  .rm-logoMark {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+  }
+
+  .rm-actions {
+    gap: 3px;
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
+  .rm-actions .rm-btn {
+    padding: 5px 5px;
+    font-size: clamp(8px, 2.15vw, 10px);
+    border-radius: 8px;
+    line-height: 1;
+  }
+
+  .rm-actions .rm-pill {
+    padding: 5px 6px;
+    font-size: clamp(8px, 2.1vw, 10px);
+    line-height: 1;
+  }
+
+  .rm-signedInEmail {
+    display: none;
+  }
+
+  .rm-mobileSignedIn {
+    display: inline-flex;
   }
 
   .rm-overlay {
@@ -361,10 +409,6 @@ body {
     overflow-x: hidden;
   }
 
-  .rm-actions {
-    overflow-x: auto;
-  }
-
   .rm-grid {
     width: 100%;
   }
@@ -379,6 +423,11 @@ body {
     max-width: 100%;
     height: auto;
   }
+}
+
+/* Desktop-only default for mobile signed-in label */
+.rm-mobileSignedIn {
+  display: none;
 }
 
 /* Role cards */

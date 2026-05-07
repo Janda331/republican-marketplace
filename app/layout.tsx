@@ -127,9 +127,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </>
             ) : (
               <>
-                <div className="rm-muted" style={{ fontWeight: 900 }}>
+                <div className="rm-muted rm-signedInEmail" style={{ fontWeight: 900 }}>
                   Signed in: {userEmail}
                 </div>
+
+                <span className="rm-pill rm-mobileSignedIn">
+                  Signed in as {(role === "vendor" ? "Vendor" : role === "admin" ? "Admin" : "Buyer")}
+                </span>
 
                 <span className="rm-pill">
                   {(role ?? "customer").toUpperCase()}
