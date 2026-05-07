@@ -1,12 +1,15 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseclient";
+
 const ADMIN_EMAILS = new Set([
   "ryleyniemi@gmail.com",
   "niemi2040@gmail.com",
   "therepublicanmarketplace@gmail.com",
 ]);
+
 type Listing = {
   id: string;
   created_at?: string;
@@ -17,10 +20,11 @@ type Listing = {
   description?: string | null;
   price_min?: number | null;
   price_max?: number | null;
+  image_url?: string | null;
 };
 
 export default function AdminPage() {
-    const router = useRouter();
+  const router = useRouter();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
@@ -48,53 +52,49 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-  (async () => {
-    const { data } = await supabase.auth.getSession();
-    const user = data.session?.user;
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      const user = data.session?.user;
 
-    if (!user) {
-      router.replace("/signin");
-      return;
-    }
+      if (!user) {
+        router.replace("/signin");
+        return;
+      }
 
-    const email = user.email?.toLowerCase() || "";
-    if (!ADMIN_EMAILS.has(email)) {
-      setMessage("Not authorized.");
-      setLoading(false);
-      return;
-    }
+      const email = user.email?.toLowerCase() || "";
+      if (!ADMIN_EMAILS.has(email)) {
+        setMessage("Not authorized.");
+        setLoading(false);
+        return;
+      }
 
-    loadPending();
-  })();
-}, []);
+      loadPending();
+    })();
+  }, [router]);
 
   async function setStatus(id: string, status: "approved" | "rejected") {
-  setMessage(null);
+    setMessage(null);
 
-  const { data, error } = await supabase
-    .from("listings")
-    .update({ status })
-    .eq("id", id)
-    .select("id,status") // ✅ force a returned row
-    .single();
+    const { data, error } = await supabase
+      .from("listings")
+      .update({ status })
+      .eq("id", id)
+      .select("id,status")
+      .single();
 
-  if (error) {
-    console.error("Update status error:", error);
-    setMessage(error.message);
-    return;
-  }
-
-  // ✅ If RLS blocks it, you often get no row back
-  if (!data) {
-    setMessage("No row updated (likely blocked by RLS).");
-    return;
-  }
-
-  // remove from UI immediately
-  setListings((prev) => prev.filter((l) => l.id !== id));
+    if (error) {
+      console.error("Update status error:", error);
+      setMessage(error.message);
+      return;
     }
 
- 
+    if (!data) {
+      setMessage("No row updated (likely blocked by RLS).");
+      return;
+    }
+
+    setListings((prev) => prev.filter((l) => l.id !== id));
+  }
 
   return (
     <div>
@@ -115,7 +115,10 @@ export default function AdminPage() {
         </div>
 
         {message ? (
-          <div className="rm-muted" style={{ marginTop: 12, whiteSpace: "pre-wrap" }}>
+          <div
+            className="rm-muted"
+            style={{ marginTop: 12, whiteSpace: "pre-wrap" }}
+          >
             {message}
           </div>
         ) : null}
@@ -129,6 +132,20 @@ export default function AdminPage() {
         <div className="rm-grid">
           {listings.map((l) => (
             <div key={l.id} className="rm-card">
+              {l.image_url ? (
+                <img
+                  src={l.image_url}
+                  alt={l.title || "Listing image"}
+                  style={{
+                    width: "100%",
+                    height: 180,
+                    objectFit: "cover",
+                    borderRadius: 16,
+                    marginBottom: 14,
+                  }}
+                />
+              ) : null}
+
               <div>
                 <div className="rm-muted" style={{ fontWeight: 900 }}>
                   {l.vendor_name || "Unknown Vendor"}
@@ -138,9 +155,20 @@ export default function AdminPage() {
                   {l.title || "(No title)"}
                 </div>
 
-                <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
-                  {l.category_slug ? <span className="rm-pill">{l.category_slug}</span> : null}
+                <div
+                  style={{
+                    marginTop: 10,
+                    display: "flex",
+                    gap: 10,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {l.category_slug ? (
+                    <span className="rm-pill">{l.category_slug}</span>
+                  ) : null}
+
                   <span className="rm-pill">{l.status || "pending"}</span>
+
                   {l.price_min != null || l.price_max != null ? (
                     <span className="rm-pill">
                       ${l.price_min ?? "?"} – ${l.price_max ?? "?"}
@@ -163,16 +191,16 @@ export default function AdminPage() {
 
               <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
                 <button
-                className="rm-cta"
-                onClick={() => setStatus(l.id, "approved")}
-                style={{ flex: 1 }}
+                  className="rm-cta"
+                  onClick={() => setStatus(l.id, "approved")}
+                  style={{ flex: 1 }}
                 >
-                Approve
+                  Approve
                 </button>
 
                 <button
-                onClick={() => setStatus(l.id, "rejected")}
-                style={{
+                  onClick={() => setStatus(l.id, "rejected")}
+                  style={{
                     flex: 1,
                     borderRadius: 14,
                     padding: "12px 14px",
@@ -181,9 +209,9 @@ export default function AdminPage() {
                     fontWeight: 900,
                     border: "1px solid rgba(17,24,39,0.15)",
                     cursor: "pointer",
-                }}
+                  }}
                 >
-                Reject
+                  Reject
                 </button>
               </div>
             </div>
