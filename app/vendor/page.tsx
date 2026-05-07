@@ -261,7 +261,13 @@ export default function VendorPage() {
             </div>
 
             {imagePreview ? (
-              <div className="rm-listingImageFrame" style={{ marginTop: 12 }}>
+              <div
+                className="rm-listingImageFrame"
+                style={{
+                  marginTop: 12,
+                  maxWidth: 420,
+                }}
+              >
                 <img
                   src={imagePreview}
                   alt="Listing preview"
