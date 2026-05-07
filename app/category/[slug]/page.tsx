@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseclient";
 
 type Props = {
-  params: Promise<{ slug: string }>; // ✅ Next 16 style
+  params: Promise<{ slug: string }>;
 };
 
 function titleFromSlug(slug: string) {
@@ -9,7 +9,7 @@ function titleFromSlug(slug: string) {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const { slug } = await params; // ✅ THIS is the key fix
+  const { slug } = await params;
 
   if (!slug) {
     return <div className="rm-card">Invalid category (missing slug)</div>;
@@ -33,13 +33,36 @@ export default async function CategoryPage({ params }: Props) {
         {listings && listings.length > 0 ? (
           listings.map((listing: any) => (
             <div key={listing.id} className="rm-card">
+              {listing.image_url ? (
+                <img
+                  src={listing.image_url}
+                  alt={listing.title ?? "Listing image"}
+                  style={{
+                    width: "100%",
+                    height: 180,
+                    objectFit: "cover",
+                    borderRadius: 16,
+                    marginBottom: 14,
+                  }}
+                />
+              ) : null}
+
               <div>
                 <div style={{ fontSize: 18, fontWeight: 900 }}>
                   {listing.title}
                 </div>
+
                 <p className="rm-muted" style={{ marginTop: 10 }}>
                   {listing.description}
                 </p>
+
+                {listing.price_min != null || listing.price_max != null ? (
+                  <div style={{ marginTop: 12 }}>
+                    <span className="rm-pill">
+                      ${listing.price_min ?? "?"} – ${listing.price_max ?? "?"}
+                    </span>
+                  </div>
+                ) : null}
               </div>
 
               <a className="rm-cta" href={`/listing/${listing.id}`}>
@@ -48,7 +71,9 @@ export default async function CategoryPage({ params }: Props) {
             </div>
           ))
         ) : (
-          <div className="rm-muted">No approved listings yet in this category.</div>
+          <div className="rm-muted">
+            No approved listings yet in this category.
+          </div>
         )}
       </div>
     </div>
