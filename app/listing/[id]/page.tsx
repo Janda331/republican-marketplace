@@ -38,17 +38,13 @@ export default async function ListingDetailPage({ params }: Props) {
     <AuthGate>
       <div className="rm-card" style={{ maxWidth: 900 }}>
         {listing.image_url ? (
-          <img
-            src={listing.image_url}
-            alt={listing.title ?? "Listing image"}
-            style={{
-              width: "100%",
-              maxHeight: 420,
-              objectFit: "cover",
-              borderRadius: 20,
-              marginBottom: 18,
-            }}
-          />
+          <div className="rm-listingImageFrame">
+            <img
+              src={listing.image_url}
+              alt={listing.title ?? "Listing image"}
+              className="rm-listingImage"
+            />
+          </div>
         ) : null}
 
         <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 10 }}>

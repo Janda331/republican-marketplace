@@ -34,17 +34,13 @@ export default async function CategoryPage({ params }: Props) {
           listings.map((listing: any) => (
             <div key={listing.id} className="rm-card">
               {listing.image_url ? (
-                <img
-                  src={listing.image_url}
-                  alt={listing.title ?? "Listing image"}
-                  style={{
-                    width: "100%",
-                    height: 180,
-                    objectFit: "cover",
-                    borderRadius: 16,
-                    marginBottom: 14,
-                  }}
-                />
+                <div className="rm-listingImageFrame">
+                  <img
+                    src={listing.image_url}
+                    alt={listing.title ?? "Listing image"}
+                    className="rm-listingImage"
+                  />
+                </div>
               ) : null}
 
               <div>
