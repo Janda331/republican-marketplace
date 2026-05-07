@@ -209,6 +209,12 @@
 
 .rm-cta {
   width: 100%;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
   border-radius: 14px;
   padding: 12px 14px;
   background: #111827;
