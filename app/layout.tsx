@@ -8,32 +8,37 @@ export const metadata = {
   title: "The Republican Marketplace",
   description:
     "The premier marketplace for Republican campaign services and political vendors.",
+
   icons: {
-    icon: "/logo.png",
+    icon: "/favicon.ico",
   },
+
   openGraph: {
     title: "The Republican Marketplace",
     description:
       "The premier marketplace for Republican campaign services and political vendors.",
     url: "https://therepublicanmarketplace.com",
     siteName: "The Republican Marketplace",
+
     images: [
       {
-        url: "/logo.png",
+        url: "https://therepublicanmarketplace.com/logo.png",
         width: 1200,
-        height: 630,
+        height: 1200,
         alt: "The Republican Marketplace",
       },
     ],
+
     locale: "en_US",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "The Republican Marketplace",
     description:
       "The premier marketplace for Republican campaign services and political vendors.",
-    images: ["/logo.png"],
+    images: ["https://therepublicanmarketplace.com/logo.png"],
   },
 };
 const categories = [
