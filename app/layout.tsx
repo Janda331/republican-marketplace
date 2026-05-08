@@ -84,6 +84,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     };
   }, []);
 
+  useEffect(() => {
+    const viewportContent =
+      "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+
+    let viewport = document.querySelector(
+      'meta[name="viewport"]'
+    ) as HTMLMetaElement | null;
+
+    if (!viewport) {
+      viewport = document.createElement("meta");
+      viewport.name = "viewport";
+      document.head.appendChild(viewport);
+    }
+
+    viewport.content = viewportContent;
+  }, []);
+
   async function logout() {
     await supabase.auth.signOut();
     await refreshAuth();
