@@ -505,9 +505,13 @@ body {
   }
 
   .rm-mobileLogout {
-    text-align: left;
-  }
-
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.2;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
   .rm-shell {
     display: block;
     width: 100%;
