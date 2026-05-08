@@ -127,7 +127,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </button>
 
           <a className="rm-logo" href="/">
-            <span className="rm-logoMark" />
+            <img
+              className="rm-logoMark"
+              src="/logo.png"
+              alt="The Republican Marketplace logo"
+            />
             <span className="rm-logoText">The Republican Marketplace</span>
           </a>
 
