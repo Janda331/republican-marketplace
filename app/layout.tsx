@@ -19,13 +19,19 @@ const ADMIN_EMAILS = new Set([
   "therepublicanmarketplace@gmail.com",
 ]);
 
+function roleLabel(role: string | null) {
+  if (role === "vendor") return "Vendor";
+  if (role === "admin") return "Admin";
+  return "Buyer";
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
-  // ✅ Mobile menu toggle
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
+  const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
 
   async function refreshAuth() {
     setLoadingUser(true);
@@ -43,14 +49,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const email = user.email?.toLowerCase() ?? "";
     setUserEmail(email);
 
-    // Admin override
     if (ADMIN_EMAILS.has(email)) {
       setRole("admin");
       setLoadingUser(false);
       return;
     }
 
-    // Otherwise pull role from profiles
     const { data: profile, error } = await supabase
       .from("profiles")
       .select("role")
@@ -86,16 +90,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     window.location.href = "/";
   }
 
+  const isVendorOrAdmin = role === "vendor" || role === "admin";
+  const isAdmin = role === "admin";
+
   return (
     <html lang="en">
       <body className="rm-body">
-        {/* Top bar */}
         <header className="rm-topbar">
-          {/* ✅ Mobile hamburger */}
           <button
             className="rm-hamburger"
             type="button"
-            onClick={() => setMobileMenuOpen(true)}
+            onClick={() => {
+              setMobileCategoryOpen(true);
+              setMobileAccountOpen(false);
+            }}
             aria-label="Open categories menu"
           >
             ☰
@@ -103,14 +111,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <a className="rm-logo" href="/">
             <span className="rm-logoMark" />
-            <span>The Republican Marketplace</span>
+            <span className="rm-logoText">The Republican Marketplace</span>
           </a>
 
           <nav className="rm-actions">
             {loadingUser ? (
-              <div className="rm-muted" style={{ fontWeight: 800 }}>
-                Loading…
-              </div>
+              <div className="rm-muted rm-headerLoading">Loading…</div>
             ) : !userEmail ? (
               <>
                 <a className="rm-btn rm-btnGhost" href="/signup">
@@ -122,69 +128,139 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </a>
 
                 <a className="rm-btn rm-btnPrimary" href="/vendor">
-                  List a Service
+                  List
                 </a>
               </>
             ) : (
               <>
-                <div className="rm-muted rm-signedInEmail" style={{ fontWeight: 900 }}>
+                <div className="rm-desktopOnly rm-muted" style={{ fontWeight: 900 }}>
                   Signed in: {userEmail}
                 </div>
 
-                <span className="rm-pill rm-mobileSignedIn">
-                  Signed in as {(role === "vendor" ? "Vendor" : role === "admin" ? "Admin" : "Buyer")}
-                </span>
-
-                <span className="rm-pill">
+                <span className="rm-pill rm-desktopOnly">
                   {(role ?? "customer").toUpperCase()}
                 </span>
 
-                <a className="rm-btn rm-btnGhost" href="/account/orders">
+                <span className="rm-pill rm-mobileSignedIn">
+                  Signed in as {roleLabel(role)}
+                </span>
+
+                <a className="rm-btn rm-btnGhost rm-desktopOnly" href="/account/orders">
                   My Orders
                 </a>
 
-                {(role === "vendor" || role === "admin") && (
+                {isVendorOrAdmin && (
                   <>
-                    <a className="rm-btn rm-btnPrimary" href="/vendor">
+                    <a className="rm-btn rm-btnPrimary rm-desktopOnly" href="/vendor">
                       List a Service
                     </a>
 
-                    <a className="rm-btn rm-btnGhost" href="/vendor/listings">
+                    <a className="rm-btn rm-btnGhost rm-desktopOnly" href="/vendor/listings">
                       My Listings
                     </a>
 
-                    <a className="rm-btn rm-btnGhost" href="/vendor/orders">
+                    <a className="rm-btn rm-btnGhost rm-desktopOnly" href="/vendor/orders">
                       Incoming Orders
                     </a>
                   </>
                 )}
 
-                {role === "admin" && (
-                  <a className="rm-btn rm-btnGhost" href="/admin">
+                {isAdmin && (
+                  <a className="rm-btn rm-btnGhost rm-desktopOnly" href="/admin">
                     Admin
                   </a>
                 )}
 
-                <button className="rm-btn rm-btnGhost" onClick={logout}>
+                <button
+                  className="rm-btn rm-btnGhost rm-desktopOnly"
+                  onClick={logout}
+                  type="button"
+                >
                   Logout
+                </button>
+
+                <button
+                  className="rm-btn rm-btnPrimary rm-mobileOnly"
+                  type="button"
+                  onClick={() => {
+                    setMobileAccountOpen((v) => !v);
+                    setMobileCategoryOpen(false);
+                  }}
+                >
+                  Menu
                 </button>
               </>
             )}
           </nav>
         </header>
 
-        {/* ✅ Overlay to close mobile sidebar */}
-        {mobileMenuOpen ? (
+        {mobileAccountOpen && userEmail ? (
+          <div className="rm-mobileAccountPanel">
+            <div className="rm-mobileAccountTitle">
+              Signed in as {roleLabel(role)}
+            </div>
+
+            <a
+              className="rm-mobileAccountLink"
+              href="/account/orders"
+              onClick={() => setMobileAccountOpen(false)}
+            >
+              My Orders
+            </a>
+
+            {isVendorOrAdmin ? (
+              <>
+                <a
+                  className="rm-mobileAccountLink"
+                  href="/vendor"
+                  onClick={() => setMobileAccountOpen(false)}
+                >
+                  List a Service
+                </a>
+
+                <a
+                  className="rm-mobileAccountLink"
+                  href="/vendor/listings"
+                  onClick={() => setMobileAccountOpen(false)}
+                >
+                  My Listings
+                </a>
+
+                <a
+                  className="rm-mobileAccountLink"
+                  href="/vendor/orders"
+                  onClick={() => setMobileAccountOpen(false)}
+                >
+                  Incoming Orders
+                </a>
+              </>
+            ) : null}
+
+            {isAdmin ? (
+              <a
+                className="rm-mobileAccountLink"
+                href="/admin"
+                onClick={() => setMobileAccountOpen(false)}
+              >
+                Admin
+              </a>
+            ) : null}
+
+            <button className="rm-mobileAccountLink rm-mobileLogout" onClick={logout}>
+              Logout
+            </button>
+          </div>
+        ) : null}
+
+        {mobileCategoryOpen ? (
           <div
             className="rm-overlay"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={() => setMobileCategoryOpen(false)}
           />
         ) : null}
 
-        {/* App shell */}
         <div className="rm-shell">
-          {/* Left sidebar */}
-          <aside className={`rm-sidebar ${mobileMenuOpen ? "rm-sidebarOpen" : ""}`}>
+          <aside className={`rm-sidebar ${mobileCategoryOpen ? "rm-sidebarOpen" : ""}`}>
             <div className="rm-sideTitle">Categories</div>
 
             <div className="rm-sideList">
@@ -193,7 +269,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   key={c.slug}
                   className="rm-sideItem"
                   href={`/category/${c.slug}`}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => setMobileCategoryOpen(false)}
                 >
                   <div className="rm-sideItemTitle">{c.label}</div>
                   <div className="rm-sideItemSub">View listings →</div>
@@ -202,7 +278,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </aside>
 
-          {/* Main content area */}
           <main className="rm-main">{children}</main>
         </div>
       </body>
