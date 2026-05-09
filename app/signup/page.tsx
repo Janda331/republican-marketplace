@@ -3,17 +3,90 @@
 import { useState } from "react";
 import { supabase } from "../../lib/supabaseclient";
 
+const states = [
+  { value: "", label: "Select your state" },
+  { value: "AL", label: "Alabama" },
+  { value: "AK", label: "Alaska" },
+  { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" },
+  { value: "CA", label: "California" },
+  { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" },
+  { value: "DE", label: "Delaware" },
+  { value: "FL", label: "Florida" },
+  { value: "GA", label: "Georgia" },
+  { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" },
+  { value: "IL", label: "Illinois" },
+  { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" },
+  { value: "KS", label: "Kansas" },
+  { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" },
+  { value: "ME", label: "Maine" },
+  { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "MI", label: "Michigan" },
+  { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" },
+  { value: "MO", label: "Missouri" },
+  { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" },
+  { value: "NV", label: "Nevada" },
+  { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "NM", label: "New Mexico" },
+  { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" },
+  { value: "ND", label: "North Dakota" },
+  { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" },
+  { value: "OR", label: "Oregon" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" },
+  { value: "SC", label: "South Carolina" },
+  { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" },
+  { value: "TX", label: "Texas" },
+  { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" },
+  { value: "VA", label: "Virginia" },
+  { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" },
+  { value: "WI", label: "Wisconsin" },
+  { value: "WY", label: "Wyoming" },
+];
+
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [role, setRole] = useState<"vendor" | "customer">("customer");
+  const [state, setState] = useState("");
+  const [campaignName, setCampaignName] = useState("");
+  const [vendorName, setVendorName] = useState("");
+
   const [message, setMessage] = useState<string>("");
 
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
     setMessage("");
 
-    // 1) Create auth user
+    if (!state) {
+      setMessage("Please select your state.");
+      return;
+    }
+
+    if (role === "customer" && !campaignName.trim()) {
+      setMessage("Please enter your campaign name.");
+      return;
+    }
+
+    if (role === "vendor" && !vendorName.trim()) {
+      setMessage("Please enter your vendor name.");
+      return;
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -30,10 +103,12 @@ export default function SignUpPage() {
       return;
     }
 
-    // 2) Create profile row with role
     const { error: profileError } = await supabase.from("profiles").insert({
       id: user.id,
       role,
+      state,
+      campaign_name: role === "customer" ? campaignName.trim() : null,
+      vendor_name: role === "vendor" ? vendorName.trim() : null,
     });
 
     if (profileError) {
@@ -91,12 +166,54 @@ export default function SignUpPage() {
           </button>
         </div>
 
+        <label className="rm-muted">State</label>
+        <select
+          className="rm-input"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          required
+        >
+          {states.map((s) => (
+            <option key={s.value || "blank"} value={s.value}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+
+        {role === "customer" ? (
+          <>
+            <label className="rm-muted">Campaign Name</label>
+            <input
+              className="rm-input"
+              value={campaignName}
+              onChange={(e) => setCampaignName(e.target.value)}
+              placeholder="Example: Smith for Congress"
+              required
+            />
+          </>
+        ) : (
+          <>
+            <label className="rm-muted">Vendor Name</label>
+            <input
+              className="rm-input"
+              value={vendorName}
+              onChange={(e) => setVendorName(e.target.value)}
+              placeholder="Example: Patriot Media Group"
+              required
+            />
+          </>
+        )}
+
         <button type="submit" className="rm-btn" style={{ marginTop: 8 }}>
           Sign Up
         </button>
       </form>
 
-      {message && <p style={{ marginTop: 12 }} className="rm-muted">{message}</p>}
+      {message && (
+        <p style={{ marginTop: 12 }} className="rm-muted">
+          {message}
+        </p>
+      )}
     </div>
   );
 }

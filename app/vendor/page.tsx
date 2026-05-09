@@ -11,6 +11,8 @@ const categories = [
   { slug: "mass-texting", label: "Mass Text Messaging & Emails" },
   { slug: "graphic-design", label: "Graphic Design" },
   { slug: "printing", label: "Sign & Material Printing" },
+
+  { slug: "consulting", label: "Political Consulting" },
 ];
 
 type Role = "admin" | "vendor" | "customer";
