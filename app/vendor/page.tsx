@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseclient";
 
 const categories = [
-  { slug: "video-editing", label: "Video Editing / Videography" },
-  { slug: "data-analysis", label: "Data & Map Analysis" },
-  { slug: "canvassing", label: "Canvassing" },
-  { slug: "mass-texting", label: "Mass Text Messaging & Emails" },
-  { slug: "graphic-design", label: "Graphic Design" },
-  { slug: "printing", label: "Sign & Material Printing" },
+  { slug: "Video-Editing", label: "Video Editing / Videography" },
+  { slug: "Data-Analysis", label: "Data & Map Analysis" },
+  { slug: "Canvassing", label: "Canvassing" },
+  { slug: "Mass-Texting", label: "Mass Text Messaging & Emails" },
+  { slug: "Graphic-Design", label: "Graphic Design" },
+  { slug: "Printing", label: "Sign & Material Printing" },
 
-  { slug: "consulting", label: "Political Consulting" },
+  { slug: "Consulting", label: "Political Consulting" },
 ];
 
 type Role = "admin" | "vendor" | "customer";
