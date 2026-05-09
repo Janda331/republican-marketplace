@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabaseclient";
 import AuthGate from "./AuthGate";
-import CheckoutButton from "./CheckoutButton";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -34,6 +33,9 @@ export default async function ListingDetailPage({ params }: Props) {
     );
   }
 
+  const hasContactInfo =
+    listing.contact_email || listing.contact_phone || listing.website_url;
+
   return (
     <AuthGate>
       <div className="rm-card" style={{ maxWidth: 900 }}>
@@ -51,25 +53,10 @@ export default async function ListingDetailPage({ params }: Props) {
           {listing.title}
         </h1>
 
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            flexWrap: "wrap",
-            marginBottom: 14,
-          }}
-        >
-          {listing.category_slug ? (
-            <span className="rm-pill">{listing.category_slug}</span>
-          ) : null}
-
-          {listing.status ? (
-            <span className="rm-pill">{listing.status}</span>
-          ) : null}
-
-          {listing.vendor_name ? (
-            <span className="rm-pill">{listing.vendor_name}</span>
-          ) : null}
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
+          {listing.category_slug ? <span className="rm-pill">{listing.category_slug}</span> : null}
+          {listing.status ? <span className="rm-pill">{listing.status}</span> : null}
+          {listing.vendor_name ? <span className="rm-pill">{listing.vendor_name}</span> : null}
         </div>
 
         {listing.price_min != null || listing.price_max != null ? (
@@ -88,21 +75,53 @@ export default async function ListingDetailPage({ params }: Props) {
           <p className="rm-muted">No description provided.</p>
         )}
 
-        <div
-          style={{
-            display: "flex",
-            gap: 12,
-            marginTop: 18,
-            flexWrap: "wrap",
-          }}
-        >
+        {hasContactInfo ? (
+          <div
+            className="rm-card"
+            style={{
+              marginTop: 18,
+              minHeight: "unset",
+              boxShadow: "none",
+              background: "#f9fafb",
+            }}
+          >
+            <h2 style={{ fontSize: 20, fontWeight: 900, marginBottom: 10 }}>
+              Contact Information
+            </h2>
+
+            {listing.contact_email ? (
+              <p className="rm-muted">
+                <b>Email:</b>{" "}
+                <a href={`mailto:${listing.contact_email}`}>
+                  {listing.contact_email}
+                </a>
+              </p>
+            ) : null}
+
+            {listing.contact_phone ? (
+              <p className="rm-muted">
+                <b>Phone:</b>{" "}
+                <a href={`tel:${listing.contact_phone}`}>
+                  {listing.contact_phone}
+                </a>
+              </p>
+            ) : null}
+
+            {listing.website_url ? (
+              <p className="rm-muted">
+                <b>Website:</b>{" "}
+                <a href={listing.website_url} target="_blank" rel="noreferrer">
+                  {listing.website_url}
+                </a>
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
           <a
             className="rm-btn rm-btnGhost"
-            href={
-              listing.category_slug
-                ? `/category/${listing.category_slug}`
-                : "/"
-            }
+            href={listing.category_slug ? `/category/${listing.category_slug}` : "/"}
           >
             Back to Category
           </a>
@@ -110,8 +129,6 @@ export default async function ListingDetailPage({ params }: Props) {
           <a className="rm-btn rm-btnGhost" href="/">
             Back Home
           </a>
-
-          <CheckoutButton listingId={listing.id} />
         </div>
       </div>
     </AuthGate>
