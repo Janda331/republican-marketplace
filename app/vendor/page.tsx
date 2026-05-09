@@ -29,6 +29,11 @@ export default function VendorPage() {
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
   const [description, setDescription] = useState("");
+
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [websiteUrl, setWebsiteUrl] = useState("");
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -109,6 +114,14 @@ export default function VendorPage() {
       imageUrl = data.publicUrl;
     }
 
+    const cleanedWebsite =
+      websiteUrl.trim() === ""
+        ? null
+        : websiteUrl.startsWith("http://") ||
+          websiteUrl.startsWith("https://")
+        ? websiteUrl.trim()
+        : `https://${websiteUrl.trim()}`;
+
     const { error } = await supabase.from("listings").insert([
       {
         vendor_name: vendorName,
@@ -120,6 +133,10 @@ export default function VendorPage() {
         status: "pending",
         vendor_id: user.id,
         image_url: imageUrl,
+
+        contact_email: contactEmail.trim() || null,
+        contact_phone: contactPhone.trim() || null,
+        website_url: cleanedWebsite,
       },
     ]);
 
@@ -136,8 +153,14 @@ export default function VendorPage() {
     setPriceMin("");
     setPriceMax("");
     setDescription("");
+
+    setContactEmail("");
+    setContactPhone("");
+    setWebsiteUrl("");
+
     setImageFile(null);
     setImagePreview(null);
+
     setMessage("✅ Submitted! Your listing is pending approval.");
   }
 
@@ -151,6 +174,7 @@ export default function VendorPage() {
         <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 8 }}>
           Vendor access required
         </h1>
+
         <p className="rm-muted">
           Your account is currently a <b>{role}</b>. Only vendors can list services.
         </p>
@@ -159,6 +183,7 @@ export default function VendorPage() {
           <a className="rm-btn rm-btnGhost" href="/signup">
             Create a vendor account
           </a>
+
           <a
             className="rm-btn rm-btnGhost"
             href="/signin"
@@ -187,6 +212,7 @@ export default function VendorPage() {
         <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 8 }}>
           List a Service
         </h1>
+
         <p className="rm-muted">
           Submit a listing. It will be marked <b>pending</b> until approved.
         </p>
@@ -229,6 +255,7 @@ export default function VendorPage() {
               value={priceMin}
               onChange={(e) => setPriceMin(e.target.value)}
             />
+
             <input
               className="rm-input"
               placeholder="Max Price (e.g., 1200)"
@@ -236,6 +263,30 @@ export default function VendorPage() {
               onChange={(e) => setPriceMax(e.target.value)}
             />
           </div>
+
+          <input
+            className="rm-input"
+            type="email"
+            placeholder="Contact Email (optional)"
+            value={contactEmail}
+            onChange={(e) => setContactEmail(e.target.value)}
+          />
+
+          <input
+            className="rm-input"
+            type="tel"
+            placeholder="Phone Number (optional)"
+            value={contactPhone}
+            onChange={(e) => setContactPhone(e.target.value)}
+          />
+
+          <input
+            className="rm-input"
+            type="url"
+            placeholder="Website URL (optional)"
+            value={websiteUrl}
+            onChange={(e) => setWebsiteUrl(e.target.value)}
+          />
 
           <div>
             <input
