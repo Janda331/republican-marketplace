@@ -14,6 +14,7 @@ type Listing = {
   description?: string | null;
   price_min?: number | null;
   price_max?: number | null;
+  image_url?: string | null;
 };
 
 export default function VendorListingsPage() {
@@ -34,7 +35,6 @@ export default function VendorListingsPage() {
       return;
     }
 
-    // Confirm vendor/admin role
     const { data: profile, error: profErr } = await supabase
       .from("profiles")
       .select("role")
@@ -55,7 +55,6 @@ export default function VendorListingsPage() {
       return;
     }
 
-    // Load vendor's listings
     const { data, error } = await supabase
       .from("listings")
       .select("*")
@@ -84,6 +83,7 @@ export default function VendorListingsPage() {
         <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 8 }}>
           My Listings
         </h1>
+
         <p className="rm-muted">
           These are the listings you have submitted (pending/approved/rejected).
         </p>
@@ -113,9 +113,20 @@ export default function VendorListingsPage() {
         <div className="rm-grid">
           {listings.map((l) => (
             <div key={l.id} className="rm-card">
+              {l.image_url ? (
+                <div className="rm-listingImageFrame">
+                  <img
+                    src={l.image_url}
+                    alt={l.title ?? "Listing image"}
+                    className="rm-listingImage"
+                  />
+                </div>
+              ) : null}
+
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 {l.status ? <span className="rm-pill">{l.status}</span> : null}
                 {l.category_slug ? <span className="rm-pill">{l.category_slug}</span> : null}
+
                 {l.price_min != null || l.price_max != null ? (
                   <span className="rm-pill">
                     ${l.price_min ?? "?"} – ${l.price_max ?? "?"}
@@ -134,6 +145,10 @@ export default function VendorListingsPage() {
               ) : null}
 
               <div style={{ display: "flex", gap: 12, marginTop: 14, flexWrap: "wrap" }}>
+                <a className="rm-btn rm-btnPrimary" href={`/vendor/listings/${l.id}/edit`}>
+                  Edit
+                </a>
+
                 <a className="rm-btn rm-btnGhost" href={`/listing/${l.id}`}>
                   View
                 </a>
