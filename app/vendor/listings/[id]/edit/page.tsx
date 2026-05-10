@@ -203,9 +203,10 @@ export default function EditListingPage() {
         // Re-approval rule:
         status: "pending",
       })
-      .eq("id", listingId)
-      .select("id,status")
-      .single();
+        .eq("id", listingId)
+        .eq("vendor_id", user.id)
+        .select("id,status")
+        .single();
 
     setSaving(false);
 
