@@ -185,7 +185,7 @@ export default function EditListingPage() {
       }
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("listings")
       .update({
         vendor_name: vendorName,
@@ -203,21 +203,14 @@ export default function EditListingPage() {
         // Re-approval rule:
         status: "pending",
       })
-        .eq("id", listingId)
-        .eq("vendor_id", user.id)
-        .select("id,status")
-        .single();
+      .eq("id", listingId)
+      .eq("vendor_id", user.id);
 
     setSaving(false);
 
     if (error) {
       console.error("Update listing error:", error);
       setMessage(error.message);
-      return;
-    }
-
-    if (!data) {
-      setMessage("No row updated. This may be blocked by RLS.");
       return;
     }
 
