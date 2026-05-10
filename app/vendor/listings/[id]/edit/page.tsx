@@ -214,7 +214,7 @@ export default function EditListingPage() {
       return;
     }
 
-    setMessage("✅ Listing updated and sent back to pending approval.");
+   setMessage("✅ Edit submitted, pending admin approval.");
 
     setTimeout(() => {
       router.push("/vendor/listings");

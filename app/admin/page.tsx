@@ -21,6 +21,9 @@ type Listing = {
   price_min?: number | null;
   price_max?: number | null;
   image_url?: string | null;
+  contact_email?: string | null;
+  contact_phone?: string | null;
+  website_url?: string | null;
 };
 
 export default function AdminPage() {
@@ -130,92 +133,136 @@ export default function AdminPage() {
         <div className="rm-muted">No pending listings right now.</div>
       ) : (
         <div className="rm-grid">
-          {listings.map((l) => (
-            <div key={l.id} className="rm-card">
-              {l.image_url ? (
-                <img
-                  src={l.image_url}
-                  alt={l.title || "Listing image"}
-                  style={{
-                    width: "100%",
-                    height: 180,
-                    objectFit: "cover",
-                    borderRadius: 16,
-                    marginBottom: 14,
-                  }}
-                />
-              ) : null}
+          {listings.map((l) => {
+            const hasContactInfo =
+              l.contact_email || l.contact_phone || l.website_url;
 
-              <div>
-                <div className="rm-muted" style={{ fontWeight: 900 }}>
-                  {l.vendor_name || "Unknown Vendor"}
-                </div>
-
-                <div style={{ marginTop: 8, fontSize: 20, fontWeight: 900 }}>
-                  {l.title || "(No title)"}
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 10,
-                    display: "flex",
-                    gap: 10,
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {l.category_slug ? (
-                    <span className="rm-pill">{l.category_slug}</span>
-                  ) : null}
-
-                  <span className="rm-pill">{l.status || "pending"}</span>
-
-                  {l.price_min != null || l.price_max != null ? (
-                    <span className="rm-pill">
-                      ${l.price_min ?? "?"} – ${l.price_max ?? "?"}
-                    </span>
-                  ) : null}
-                </div>
-
-                {l.description ? (
-                  <p className="rm-muted" style={{ marginTop: 14 }}>
-                    {l.description}
-                  </p>
+            return (
+              <div key={l.id} className="rm-card">
+                {l.image_url ? (
+                  <div className="rm-listingImageFrame">
+                    <img
+                      src={l.image_url}
+                      alt={l.title || "Listing image"}
+                      className="rm-listingImage"
+                    />
+                  </div>
                 ) : null}
 
-                {l.created_at ? (
-                  <p className="rm-muted" style={{ marginTop: 10, fontSize: 12 }}>
-                    Submitted: {new Date(l.created_at).toLocaleString()}
-                  </p>
-                ) : null}
-              </div>
+                <div>
+                  <div className="rm-muted" style={{ fontWeight: 900 }}>
+                    {l.vendor_name || "Unknown Vendor"}
+                  </div>
 
-              <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
-                <button
-                  className="rm-cta"
-                  onClick={() => setStatus(l.id, "approved")}
-                  style={{ flex: 1 }}
-                >
-                  Approve
-                </button>
+                  <div style={{ marginTop: 8, fontSize: 20, fontWeight: 900 }}>
+                    {l.title || "(No title)"}
+                  </div>
 
-                <button
-                  onClick={() => setStatus(l.id, "rejected")}
-                  style={{
-                    flex: 1,
-                    borderRadius: 14,
-                    padding: "12px 14px",
-                    background: "#ffffff",
-                    color: "#111827",
-                    fontWeight: 900,
-                    border: "1px solid rgba(17,24,39,0.15)",
-                    cursor: "pointer",
-                  }}
-                >
-                  Reject
-                </button>
+                  <div
+                    style={{
+                      marginTop: 10,
+                      display: "flex",
+                      gap: 10,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {l.category_slug ? (
+                      <span className="rm-pill">{l.category_slug}</span>
+                    ) : null}
+
+                    <span className="rm-pill">{l.status || "pending"}</span>
+
+                    {l.price_min != null || l.price_max != null ? (
+                      <span className="rm-pill">
+                        ${l.price_min ?? "?"} – ${l.price_max ?? "?"}
+                      </span>
+                    ) : null}
+                  </div>
+
+                  {l.description ? (
+                    <p className="rm-muted" style={{ marginTop: 14 }}>
+                      {l.description}
+                    </p>
+                  ) : null}
+
+                  {hasContactInfo ? (
+                    <div
+                      style={{
+                        marginTop: 14,
+                        padding: 12,
+                        borderRadius: 14,
+                        background: "#f9fafb",
+                        border: "1px solid rgba(17,24,39,0.10)",
+                      }}
+                    >
+                      <div style={{ fontWeight: 900, marginBottom: 8 }}>
+                        Contact Info
+                      </div>
+
+                      {l.contact_email ? (
+                        <p className="rm-muted" style={{ margin: "6px 0" }}>
+                          <b>Email:</b>{" "}
+                          <a href={`mailto:${l.contact_email}`}>
+                            {l.contact_email}
+                          </a>
+                        </p>
+                      ) : null}
+
+                      {l.contact_phone ? (
+                        <p className="rm-muted" style={{ margin: "6px 0" }}>
+                          <b>Phone:</b>{" "}
+                          <a href={`tel:${l.contact_phone}`}>
+                            {l.contact_phone}
+                          </a>
+                        </p>
+                      ) : null}
+
+                      {l.website_url ? (
+                        <p className="rm-muted" style={{ margin: "6px 0" }}>
+                          <b>Website:</b>{" "}
+                          <a href={l.website_url} target="_blank" rel="noreferrer">
+                            {l.website_url}
+                          </a>
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  {l.created_at ? (
+                    <p className="rm-muted" style={{ marginTop: 10, fontSize: 12 }}>
+                      Submitted: {new Date(l.created_at).toLocaleString()}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+                  <button
+                    className="rm-cta"
+                    onClick={() => setStatus(l.id, "approved")}
+                    style={{ flex: 1 }}
+                  >
+                    Approve
+                  </button>
+
+                  <button
+                    onClick={() => setStatus(l.id, "rejected")}
+                    style={{
+                      flex: 1,
+                      borderRadius: 14,
+                      padding: "12px 14px",
+                      background: "#ffffff",
+                      color: "#111827",
+                      fontWeight: 900,
+                      border: "1px solid rgba(17,24,39,0.15)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Reject
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
