@@ -48,13 +48,36 @@ export default async function CategoryPage({ params }: Props) {
                   {listing.title}
                 </div>
 
-                <p className="rm-muted" style={{ marginTop: 10 }}>
-                  {listing.description
-                    ? listing.description.length > 300
-                      ? `${listing.description.slice(0, 300)}... Click View Details to read more.`
-                      : listing.description
-                    : ""}
-                </p>
+                <p
+                    className="rm-muted"
+                    style={{
+                      marginTop: 10,
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {listing.description ? (
+                      listing.description.length > 300 ? (
+                        <>
+                          {listing.description.slice(0, 300)}
+
+                          <span
+                            style={{
+                              color: "#6b7280",
+                              fontStyle: "italic",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {" "}
+                            ... View Details to read more
+                          </span>
+                        </>
+                      ) : (
+                        listing.description
+                      )
+                    ) : (
+                      ""
+                    )}
+                  </p>
 
                 {listing.price_min != null || listing.price_max != null ? (
                   <div style={{ marginTop: 12 }}>
