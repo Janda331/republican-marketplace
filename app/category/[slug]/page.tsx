@@ -49,7 +49,11 @@ export default async function CategoryPage({ params }: Props) {
                 </div>
 
                 <p className="rm-muted" style={{ marginTop: 10 }}>
-                  {listing.description}
+                  {listing.description
+                    ? listing.description.length > 300
+                      ? `${listing.description.slice(0, 300)}... Click View Details to read more.`
+                      : listing.description
+                    : ""}
                 </p>
 
                 {listing.price_min != null || listing.price_max != null ? (
