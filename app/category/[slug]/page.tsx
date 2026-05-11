@@ -66,7 +66,7 @@ export default async function CategoryPage({ params }: Props) {
                 href={`/listing/${listing.id}`}
                 style={{
                   background: "#ED1C24",
-                  border: "2px solid #111111",
+                  border: "0px solid #111111",
                 }}
               >
                 View Details
