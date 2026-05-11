@@ -12,6 +12,8 @@ const categories = [
   { slug: "Printing", label: "Sign & Material Printing" },
 
   { slug: "Consulting", label: "Political Consulting" },
+  { slug: "TV-Advertising", label: "TV & Social Media Advertising" },
+  { slug: "Website-Development", label: "Website Development" },
 ];
 
 const ADMIN_EMAILS = new Set([
