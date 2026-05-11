@@ -61,7 +61,14 @@ export default async function CategoryPage({ params }: Props) {
                 ) : null}
               </div>
 
-              <a className="rm-cta" href={`/listing/${listing.id}`}>
+              <a
+                className="rm-cta"
+                href={`/listing/${listing.id}`}
+                style={{
+                  background: "#ED1C24",
+                  border: "2px solid #111111",
+                }}
+              >
                 View Details
               </a>
             </div>
