@@ -192,9 +192,9 @@ textarea {
 
 .rm-sideItem {
   text-decoration: none;
-  color: inherit;
+  color: #ffffff;
   border-radius: 18px;
-  border: 1px solid rgba(17, 24, 39, 0.12);
+  border: 2px solid #111111;
   background: #ED1C24;
   padding: 14px;
   box-shadow: 0 1px 2px rgba(17, 24, 39, 0.06);
@@ -206,19 +206,20 @@ textarea {
 }
 
 .rm-sideItem:hover {
-  background: #f9fafb;
-  box-shadow: 0 6px 16px rgba(17, 24, 39, 0.1);
+  background: #d81820;
+  box-shadow: 0 6px 16px rgba(17, 24, 39, 0.12);
   transform: translateY(-1px);
 }
 
 .rm-sideItemTitle {
   font-weight: 800;
+  color: #ffffff;
 }
 
 .rm-sideItemSub {
   margin-top: 4px;
   font-size: 13px;
-  color: rgba(17, 24, 39, 0.6);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 /* Main */
