@@ -12,9 +12,27 @@ const categories = [
   { slug: "Graphic-Design", label: "Graphic Design" },
   { slug: "Printing", label: "Sign & Material Printing" },
   { slug: "Consulting", label: "Political Consulting" },
-
   { slug: "TV-Advertising", label: "TV & Social Media Advertising" },
   { slug: "Website-Development", label: "Website Development" },
+];
+
+const priceUnits = [
+  { value: "", label: "Flat / Total Price" },
+  { value: "per flyer", label: "Per Flyer" },
+  { value: "per text", label: "Per Text" },
+  { value: "per email", label: "Per Email" },
+  { value: "per hour", label: "Per Hour" },
+  { value: "per day", label: "Per Day" },
+  { value: "per week", label: "Per Week" },
+  { value: "per month", label: "Per Month" },
+  { value: "per door knock", label: "Per Door Knock" },
+  { value: "per call", label: "Per Call" },
+  { value: "per mail piece", label: "Per Mail Piece" },
+  { value: "per graphic", label: "Per Graphic" },
+  { value: "per video", label: "Per Video" },
+  { value: "per website", label: "Per Website" },
+  { value: "per event", label: "Per Event" },
+  { value: "per campaign", label: "Per Campaign" },
 ];
 
 type Role = "admin" | "vendor" | "customer";
@@ -28,8 +46,11 @@ export default function VendorPage() {
   const [vendorName, setVendorName] = useState("");
   const [categorySlug, setCategorySlug] = useState(categories[0].slug);
   const [title, setTitle] = useState("");
+
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
+  const [priceUnit, setPriceUnit] = useState("");
+
   const [description, setDescription] = useState("");
 
   const [contactEmail, setContactEmail] = useState("");
@@ -116,13 +137,20 @@ export default function VendorPage() {
       imageUrl = data.publicUrl;
     }
 
-    const cleanedWebsite =
-      websiteUrl.trim() === ""
-        ? null
-        : websiteUrl.startsWith("http://") ||
-          websiteUrl.startsWith("https://")
-        ? websiteUrl.trim()
-        : `https://${websiteUrl.trim()}`;
+    const rawWebsite = websiteUrl.trim();
+
+    let cleanedWebsite: string | null = null;
+
+    if (rawWebsite !== "") {
+      if (
+        rawWebsite.startsWith("http://") ||
+        rawWebsite.startsWith("https://")
+      ) {
+        cleanedWebsite = rawWebsite;
+      } else {
+        cleanedWebsite = `https://${rawWebsite}`;
+      }
+    }
 
     const { error } = await supabase.from("listings").insert([
       {
@@ -130,8 +158,11 @@ export default function VendorPage() {
         category_slug: categorySlug,
         title,
         description,
+
         price_min: priceMin ? Number(priceMin) : null,
         price_max: priceMax ? Number(priceMax) : null,
+        price_unit: priceUnit || null,
+
         status: "pending",
         vendor_id: user.id,
         image_url: imageUrl,
@@ -154,6 +185,7 @@ export default function VendorPage() {
     setTitle("");
     setPriceMin("");
     setPriceMax("");
+    setPriceUnit("");
     setDescription("");
 
     setContactEmail("");
@@ -180,30 +212,6 @@ export default function VendorPage() {
         <p className="rm-muted">
           Your account is currently a <b>{role}</b>. Only vendors can list services.
         </p>
-
-        <div style={{ marginTop: 14, display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <a className="rm-btn rm-btnGhost" href="/signup">
-            Create a vendor account
-          </a>
-
-          <a
-            className="rm-btn rm-btnGhost"
-            href="/signin"
-            onClick={async (e) => {
-              e.preventDefault();
-              await supabase.auth.signOut();
-              router.replace("/signin");
-            }}
-          >
-            Sign out
-          </a>
-        </div>
-
-        {message ? (
-          <div className="rm-muted" style={{ marginTop: 12 }}>
-            {message}
-          </div>
-        ) : null}
       </div>
     );
   }
@@ -244,7 +252,7 @@ export default function VendorPage() {
 
           <input
             className="rm-input"
-            placeholder="Listing Title (e.g., Website Development)"
+            placeholder="Listing Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -253,18 +261,30 @@ export default function VendorPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <input
               className="rm-input"
-              placeholder="Min Price (e.g., 500)"
+              placeholder="Min Price"
               value={priceMin}
               onChange={(e) => setPriceMin(e.target.value)}
             />
 
             <input
               className="rm-input"
-              placeholder="Max Price (e.g., 1200)"
+              placeholder="Max Price"
               value={priceMax}
               onChange={(e) => setPriceMax(e.target.value)}
             />
           </div>
+
+          <select
+            className="rm-input"
+            value={priceUnit}
+            onChange={(e) => setPriceUnit(e.target.value)}
+          >
+            {priceUnits.map((u) => (
+              <option key={u.value} value={u.value}>
+                {u.label}
+              </option>
+            ))}
+          </select>
 
           <input
             className="rm-input"
@@ -284,53 +304,10 @@ export default function VendorPage() {
 
           <input
             className="rm-input"
-            type="url"
-            placeholder="Website URL (optional)"
+            placeholder="Website (optional)"
             value={websiteUrl}
             onChange={(e) => setWebsiteUrl(e.target.value)}
           />
-
-          <div>
-            <input
-              className="rm-input"
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0] ?? null;
-                setImageFile(file);
-
-                if (imagePreview) {
-                  URL.revokeObjectURL(imagePreview);
-                }
-
-                if (file) {
-                  setImagePreview(URL.createObjectURL(file));
-                } else {
-                  setImagePreview(null);
-                }
-              }}
-            />
-
-            <div className="rm-imageHelp" style={{ marginTop: 8 }}>
-              Preview below shows how your image will appear. Wide landscape images work best.
-            </div>
-
-            {imagePreview ? (
-              <div
-                className="rm-listingImageFrame"
-                style={{
-                  marginTop: 12,
-                  maxWidth: 420,
-                }}
-              >
-                <img
-                  src={imagePreview}
-                  alt="Listing preview"
-                  className="rm-listingImage"
-                />
-              </div>
-            ) : null}
-          </div>
 
           <textarea
             className="rm-input"
