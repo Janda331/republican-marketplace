@@ -70,8 +70,10 @@ export default async function ListingDetailPage({ params }: Props) {
                   : "/"
               }
               style={{
-                background: "rgba(255,255,255,0.92)",
+                background: "rgba(255,255,255,0.94)",
                 backdropFilter: "blur(6px)",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.28)",
+                border: "1px solid rgba(255,255,255,0.65)",
               }}
             >
               Back to Category
@@ -81,8 +83,10 @@ export default async function ListingDetailPage({ params }: Props) {
               className="rm-btn rm-btnGhost"
               href="/"
               style={{
-                background: "rgba(255,255,255,0.92)",
+                background: "rgba(255,255,255,0.94)",
                 backdropFilter: "blur(6px)",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.28)",
+                border: "1px solid rgba(255,255,255,0.65)",
               }}
             >
               Back Home
