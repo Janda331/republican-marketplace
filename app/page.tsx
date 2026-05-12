@@ -41,7 +41,11 @@ export default async function Home() {
       .in("id", featuredListingIds)
       .eq("status", "approved");
 
-    featuredListings = data ?? [];
+    featuredListings =
+      data?.sort(
+        (a: any, b: any) =>
+          featuredListingIds.indexOf(a.id) - featuredListingIds.indexOf(b.id)
+      ) ?? [];
   }
 
   if (fallbackError) {
