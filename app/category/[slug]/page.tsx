@@ -8,6 +8,26 @@ function titleFromSlug(slug: string) {
   return slug.replace(/-/g, " ");
 }
 
+function formatPrice(listing: any) {
+  const min = listing.price_min;
+  const max = listing.price_max;
+  const unit = listing.price_unit || "total";
+
+  if (min == null && max == null) return null;
+
+  // Same exact price
+  if (
+    min != null &&
+    max != null &&
+    Number(min) === Number(max)
+  ) {
+    return `$${min} ${unit}`;
+  }
+
+  // Range
+  return `$${min ?? "?"} – $${max ?? "?"} ${unit}`;
+}
+
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
 
@@ -49,37 +69,37 @@ export default async function CategoryPage({ params }: Props) {
                 </div>
 
                 <p
-                    className="rm-muted"
-                    style={{
-                      marginTop: 10,
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {listing.description ? (
-                      listing.description.length > 300 ? (
-                        <>
-                          {listing.description.slice(0, 300)}
+                  className="rm-muted"
+                  style={{
+                    marginTop: 10,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {listing.description ? (
+                    listing.description.length > 300 ? (
+                      <>
+                        {listing.description.slice(0, 300)}
 
-                          <span
-                            style={{
-                              color: "#6b7280",
-                              fontStyle: "italic",
-                              fontWeight: 600,
-                            }}
-                          >
-                            {" "}
-                            ... View Details to read more
-                          </span>
-                        </>
-                      ) : (
-                        listing.description
-                      )
+                        <span
+                          style={{
+                            color: "#6b7280",
+                            fontStyle: "italic",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {" "}
+                          ... View Details to read more
+                        </span>
+                      </>
                     ) : (
-                      ""
-                    )}
-                  </p>
+                      listing.description
+                    )
+                  ) : (
+                    ""
+                  )}
+                </p>
 
-                {listing.price_min != null || listing.price_max != null ? (
+                {formatPrice(listing) ? (
                   <div
                     style={{
                       marginTop: 14,
@@ -87,29 +107,7 @@ export default async function CategoryPage({ params }: Props) {
                     }}
                   >
                     <span className="rm-pill">
-                      ${listing.price_min ?? "?"} – ${listing.price_max ?? "?"}
-
-                      {listing.price_unit ? (
-                        <span
-                          style={{
-                            marginLeft: 6,
-                            fontWeight: 700,
-                            opacity: 0.8,
-                          }}
-                        >
-                          {listing.price_unit}
-                        </span>
-                      ) : (
-                        <span
-                          style={{
-                            marginLeft: 6,
-                            fontWeight: 700,
-                            opacity: 0.8,
-                          }}
-                        >
-                          total
-                        </span>
-                      )}
+                      {formatPrice(listing)}
                     </span>
                   </div>
                 ) : null}
