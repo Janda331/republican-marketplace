@@ -7,13 +7,17 @@ const featuredListingIds: string[] = [
 ];
 
 function formatPrice(listing: any) {
-  if (listing.price_min == null && listing.price_max == null) return null;
-
-  const min = listing.price_min ?? "?";
-  const max = listing.price_max ?? "?";
+  const min = listing.price_min;
+  const max = listing.price_max;
   const unit = listing.price_unit || "total";
 
-  return `$${min} – $${max} ${unit}`;
+  if (min == null && max == null) return null;
+
+  if (min != null && max != null && Number(min) === Number(max)) {
+    return `$${min} ${unit}`;
+  }
+
+  return `$${min ?? "?"} – $${max ?? "?"} ${unit}`;
 }
 
 function truncateDescription(description?: string | null) {
@@ -124,6 +128,18 @@ export default async function Home() {
         <div className="rm-grid">
           {featuredListings.map((listing: any) => (
             <div key={listing.id} className="rm-card">
+              {listing.vendor_name ? (
+                <div
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 900,
+                    marginBottom: 12,
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {listing.vendor_name}
+                </div>
+              ) : null}
               {listing.image_url ? (
                 <div className="rm-listingImageFrame">
                   <img
