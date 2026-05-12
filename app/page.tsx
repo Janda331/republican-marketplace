@@ -66,7 +66,7 @@ export default async function Home() {
 
           <h1
             style={{
-              fontSize: 36,
+              fontSize: 48,
               fontWeight: 950,
               lineHeight: 1.05,
               marginBottom: 12,
