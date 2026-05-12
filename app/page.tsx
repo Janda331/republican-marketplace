@@ -135,6 +135,8 @@ export default async function Home() {
                     fontWeight: 900,
                     marginBottom: 12,
                     lineHeight: 1.1,
+                    textAlign: "center",
+                    width: "100%",
                   }}
                 >
                   {listing.vendor_name}
