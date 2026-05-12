@@ -1,9 +1,9 @@
 import { supabase } from "../lib/supabaseclient";
 
 const featuredListingIds: string[] = [
-  "3cf6da6d-bad5-4113-b5a6-ccdba0981d14",
-  "639989b3-9a09-4dde-aa41-1b269487fe2c",
   "2b004e6b-92c1-4eea-9262-c4ae88050ad2",
+  "639989b3-9a09-4dde-aa41-1b269487fe2c",
+  "3cf6da6d-bad5-4113-b5a6-ccdba0981d14",
 ];
 
 function formatPrice(listing: any) {
