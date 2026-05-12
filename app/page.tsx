@@ -97,7 +97,7 @@ export default async function Home() {
             flexWrap: "wrap",
           }}
         >
-          <a className="rm-btn rm-btnPrimary" href="/category/Consulting">
+          <a className="rm-btn rm-btnPrimary" href="/category/Data-Analysis">
             Browse Services
           </a>
 
