@@ -16,7 +16,24 @@ const categories = [
   { slug: "TV-Advertising", label: "TV & Social Media Advertising" },
   { slug: "Website-Development", label: "Website Development" },
 ];
-
+const priceUnits = [
+  { value: "", label: "Flat / Total Price" },
+  { value: "per flyer", label: "Per Flyer" },
+  { value: "per text", label: "Per Text" },
+  { value: "per email", label: "Per Email" },
+  { value: "per hour", label: "Per Hour" },
+  { value: "per day", label: "Per Day" },
+  { value: "per week", label: "Per Week" },
+  { value: "per month", label: "Per Month" },
+  { value: "per door knock", label: "Per Door Knock" },
+  { value: "per call", label: "Per Call" },
+  { value: "per mail piece", label: "Per Mail Piece" },
+  { value: "per graphic", label: "Per Graphic" },
+  { value: "per video", label: "Per Video" },
+  { value: "per website", label: "Per Website" },
+  { value: "per event", label: "Per Event" },
+  { value: "per campaign", label: "Per Campaign" },
+];
 type Listing = {
   id: string;
   vendor_id: string;
@@ -27,6 +44,7 @@ type Listing = {
   description?: string | null;
   price_min?: number | null;
   price_max?: number | null;
+  price_unit?: string | null;
   image_url?: string | null;
   contact_email?: string | null;
   contact_phone?: string | null;
@@ -46,6 +64,7 @@ export default function EditListingPage() {
   const [title, setTitle] = useState("");
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
+  const [priceUnit, setPriceUnit] = useState("");
   const [description, setDescription] = useState("");
 
   const [contactEmail, setContactEmail] = useState("");
@@ -123,6 +142,7 @@ export default function EditListingPage() {
       setTitle(row.title ?? "");
       setPriceMin(row.price_min != null ? String(row.price_min) : "");
       setPriceMax(row.price_max != null ? String(row.price_max) : "");
+      setPriceUnit(row.price_unit ?? "");
       setDescription(row.description ?? "");
       setContactEmail(row.contact_email ?? "");
       setContactPhone(row.contact_phone ?? "");
@@ -197,6 +217,7 @@ export default function EditListingPage() {
         description,
         price_min: priceMin ? Number(priceMin) : null,
         price_max: priceMax ? Number(priceMax) : null,
+        price_unit: priceUnit || null,
         image_url: imageUrl,
 
         contact_email: contactEmail.trim() || null,
@@ -298,7 +319,17 @@ export default function EditListingPage() {
               value={priceMin}
               onChange={(e) => setPriceMin(e.target.value)}
             />
-
+            <select
+              className="rm-input"
+              value={priceUnit}
+              onChange={(e) => setPriceUnit(e.target.value)}
+            >
+              {priceUnits.map((u) => (
+                <option key={u.value} value={u.value}>
+                  {u.label}
+                </option>
+              ))}
+            </select>
             <input
               className="rm-input"
               placeholder="Max Price"
