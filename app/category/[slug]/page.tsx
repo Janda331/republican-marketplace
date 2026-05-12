@@ -53,6 +53,18 @@ export default async function CategoryPage({ params }: Props) {
         {listings && listings.length > 0 ? (
           listings.map((listing: any) => (
             <div key={listing.id} className="rm-card">
+              {listing.vendor_name ? (
+                <div
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 900,
+                    marginBottom: 12,
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {listing.vendor_name}
+                </div>
+              ) : null}
               {listing.image_url ? (
                 <div className="rm-listingImageFrame">
                   <img
