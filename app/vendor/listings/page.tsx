@@ -14,6 +14,7 @@ type Listing = {
   description?: string | null;
   price_min?: number | null;
   price_max?: number | null;
+  price_unit?: string | null;
   image_url?: string | null;
 };
 
@@ -130,6 +131,28 @@ export default function VendorListingsPage() {
                 {l.price_min != null || l.price_max != null ? (
                   <span className="rm-pill">
                     ${l.price_min ?? "?"} – ${l.price_max ?? "?"}
+
+                    {l.price_unit ? (
+                      <span
+                        style={{
+                          marginLeft: 6,
+                          fontWeight: 700,
+                          opacity: 0.8,
+                        }}
+                      >
+                        {l.price_unit}
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          marginLeft: 6,
+                          fontWeight: 700,
+                          opacity: 0.8,
+                        }}
+                      >
+                        total
+                      </span>
+                    )}
                   </span>
                 ) : null}
               </div>
