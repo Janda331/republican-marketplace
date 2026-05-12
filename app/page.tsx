@@ -131,7 +131,7 @@ export default async function Home() {
               {listing.vendor_name ? (
                 <div
                   style={{
-                    fontSize: 24,
+                    fontSize: 36,
                     fontWeight: 900,
                     marginBottom: 12,
                     lineHeight: 1.1,
