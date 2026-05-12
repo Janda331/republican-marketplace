@@ -39,25 +39,60 @@ export default async function ListingDetailPage({ params }: Props) {
   return (
     <AuthGate>
       <div className="rm-card" style={{ maxWidth: 900 }}>
-        {listing.image_url ? (
-          <div className="rm-listingImageFrame">
-            <img
-              src={listing.image_url}
-              alt={listing.title ?? "Listing image"}
-              className="rm-listingImage"
-            />
+        <div style={{ position: "relative" }}>
+          {listing.image_url ? (
+            <div className="rm-listingImageFrame">
+              <img
+                src={listing.image_url}
+                alt={listing.title ?? "Listing image"}
+                className="rm-listingImage"
+              />
+            </div>
+          ) : null}
+
+          <div
+            style={{
+              position: "absolute",
+              top: 12,
+              right: 12,
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+              justifyContent: "flex-end",
+              zIndex: 5,
+            }}
+          >
+            <a
+              className="rm-btn rm-btnGhost"
+              href={
+                listing.category_slug
+                  ? `/category/${listing.category_slug}`
+                  : "/"
+              }
+              style={{
+                background: "rgba(255,255,255,0.92)",
+                backdropFilter: "blur(6px)",
+              }}
+            >
+              Back to Category
+            </a>
+
+            <a
+              className="rm-btn rm-btnGhost"
+              href="/"
+              style={{
+                background: "rgba(255,255,255,0.92)",
+                backdropFilter: "blur(6px)",
+              }}
+            >
+              Back Home
+            </a>
           </div>
-        ) : null}
+        </div>
 
         <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 10 }}>
           {listing.title}
         </h1>
-
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
-          {listing.category_slug ? <span className="rm-pill">{listing.category_slug}</span> : null}
-          {listing.status ? <span className="rm-pill">{listing.status}</span> : null}
-          {listing.vendor_name ? <span className="rm-pill">{listing.vendor_name}</span> : null}
-        </div>
 
         {listing.price_min != null || listing.price_max != null ? (
           <div style={{ marginBottom: 12 }}>
@@ -77,19 +112,31 @@ export default async function ListingDetailPage({ params }: Props) {
           </div>
         ) : null}
 
-        {listing.description ? (
-          <p className="rm-muted" style={{ whiteSpace: "pre-wrap" }}>
-            {listing.description}
-          </p>
-        ) : (
-          <p className="rm-muted">No description provided.</p>
-        )}
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            flexWrap: "wrap",
+            marginBottom: 14,
+          }}
+        >
+          {listing.category_slug ? (
+            <span className="rm-pill">{listing.category_slug}</span>
+          ) : null}
+
+          {listing.status ? <span className="rm-pill">{listing.status}</span> : null}
+
+          {listing.vendor_name ? (
+            <span className="rm-pill">{listing.vendor_name}</span>
+          ) : null}
+        </div>
 
         {hasContactInfo ? (
           <div
             className="rm-card"
             style={{
-              marginTop: 18,
+              marginTop: 10,
+              marginBottom: 18,
               minHeight: "unset",
               boxShadow: "none",
               background: "#f9fafb",
@@ -128,17 +175,18 @@ export default async function ListingDetailPage({ params }: Props) {
           </div>
         ) : null}
 
-        <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
-          <a
-            className="rm-btn rm-btnGhost"
-            href={listing.category_slug ? `/category/${listing.category_slug}` : "/"}
-          >
-            Back to Category
-          </a>
+        <div style={{ marginTop: 18 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 900, marginBottom: 10 }}>
+            Description
+          </h2>
 
-          <a className="rm-btn rm-btnGhost" href="/">
-            Back Home
-          </a>
+          {listing.description ? (
+            <p className="rm-muted" style={{ whiteSpace: "pre-wrap" }}>
+              {listing.description}
+            </p>
+          ) : (
+            <p className="rm-muted">No description provided.</p>
+          )}
         </div>
       </div>
     </AuthGate>
