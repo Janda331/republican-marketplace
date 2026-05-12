@@ -80,17 +80,39 @@ export default async function CategoryPage({ params }: Props) {
                   </p>
 
                 {listing.price_min != null || listing.price_max != null ? (
-                <div
-                  style={{
-                    marginTop: 14,
-                    marginBottom: 18,
-                  }}
-                >
-                  <span className="rm-pill">
-                    ${listing.price_min ?? "?"} – ${listing.price_max ?? "?"}
-                  </span>
-                </div>
-              ) : null}
+                  <div
+                    style={{
+                      marginTop: 14,
+                      marginBottom: 18,
+                    }}
+                  >
+                    <span className="rm-pill">
+                      ${listing.price_min ?? "?"} – ${listing.price_max ?? "?"}
+
+                      {listing.price_unit ? (
+                        <span
+                          style={{
+                            marginLeft: 6,
+                            fontWeight: 700,
+                            opacity: 0.8,
+                          }}
+                        >
+                          {listing.price_unit}
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: 6,
+                            fontWeight: 700,
+                            opacity: 0.8,
+                          }}
+                        >
+                          total
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                ) : null}
               </div>
 
               <a
