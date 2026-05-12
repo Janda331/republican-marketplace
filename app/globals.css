@@ -3,9 +3,14 @@
 @tailwind utilities;
 
 html,
+html,
 body {
-  margin: 0;
-  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
   font-family:
     Inter,
     -apple-system,
@@ -15,6 +20,7 @@ body {
     Helvetica,
     Arial,
     sans-serif;
+
   background: #f5f7fb;
   color: #111827;
 }
