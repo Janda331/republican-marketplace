@@ -67,7 +67,14 @@ export default async function Home() {
             "linear-gradient(135deg, #ffffff 0%, #f9fafb 55%, #eef2ff 100%)",
         }}
       >
-        <div>
+        <div
+          style={{
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <div className="rm-pill" style={{ marginBottom: 14 }}>
             Political Services Marketplace
           </div>
@@ -78,6 +85,7 @@ export default async function Home() {
               fontWeight: 950,
               lineHeight: 1.05,
               marginBottom: 12,
+              textAlign: "center",
             }}
           >
             The Republican Marketplace
@@ -89,29 +97,31 @@ export default async function Home() {
               fontSize: 16,
               lineHeight: 1.7,
               maxWidth: 760,
+              textAlign: "center",
             }}
           >
             Find trusted campaign vendors, political consultants, media teams,
             printing services, canvassing support, digital advertising help, and
             other Republican campaign services in one place.
           </p>
-        </div>
 
-        <div
-          style={{
-            marginTop: 18,
-            display: "flex",
-            gap: 12,
-            flexWrap: "wrap",
-          }}
-        >
-          <a className="rm-btn rm-btnPrimary" href="/category/Data-Analysis">
-            Browse Services
-          </a>
+          <div
+            style={{
+              marginTop: 18,
+              display: "flex",
+              gap: 12,
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            <a className="rm-btn rm-btnPrimary" href="/category/Data-Analysis">
+              Browse Services
+            </a>
 
-          <a className="rm-btn rm-btnGhost" href="/vendor">
-            List a Service
-          </a>
+            <a className="rm-btn rm-btnGhost" href="/vendor">
+              List a Service
+            </a>
+          </div>
         </div>
       </section>
 
