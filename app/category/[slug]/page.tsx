@@ -72,74 +72,36 @@ export default async function CategoryPage({ params }: Props) {
             const ratingSummary = ratingsByVendor.get(listing.vendor_id);
             const averageRating = ratingSummary?.average_rating ?? null;
             const reviewCount = ratingSummary?.review_count ?? 0;
+            const priceText = formatPrice(listing);
 
             return (
               <div key={listing.id} className="rm-card">
-                {listing.vendor_name ? (
-                  <div
-                    style={{
-                      fontSize: 36,
-                      fontWeight: 900,
-                      marginBottom: 8,
-                      lineHeight: 1.1,
-                      textAlign: "center",
-                      width: "100%",
-                    }}
-                  >
-                    {listing.vendor_name}
-                  </div>
-                ) : null}
-
-                <div
-                  style={{
-                    marginTop: 14,
-                    marginBottom: 18,
-                    display: "flex",
-                    gap: 10,
-                    flexWrap: "wrap",
-                    alignItems: "center",
-                  }}
-                >
-                  {formatPrice(listing) ? (
-                    <span className="rm-pill">{formatPrice(listing)}</span>
-                  ) : null}
-
-                  <span
-                    className="rm-pill"
-                    style={{
-                      gap: 6,
-                    }}
-                  >
-                    <span
+                <div>
+                  {listing.vendor_name ? (
+                    <div
                       style={{
-                        color: "#f59e0b",
-                        fontSize: 15,
-                        letterSpacing: 1,
+                        fontSize: 36,
                         fontWeight: 900,
+                        marginBottom: 12,
+                        lineHeight: 1.1,
+                        textAlign: "center",
+                        width: "100%",
                       }}
                     >
-                      {renderStars(averageRating)}
-                    </span>
+                      {listing.vendor_name}
+                    </div>
+                  ) : null}
 
-                    <span>
-                      {averageRating != null
-                        ? `${averageRating}/5 (${reviewCount})`
-                        : "No reviews"}
-                    </span>
-                  </span>
-                </div>
+                  {listing.image_url ? (
+                    <div className="rm-listingImageFrame">
+                      <img
+                        src={listing.image_url}
+                        alt={listing.title ?? "Listing image"}
+                        className="rm-listingImage"
+                      />
+                    </div>
+                  ) : null}
 
-                {listing.image_url ? (
-                  <div className="rm-listingImageFrame">
-                    <img
-                      src={listing.image_url}
-                      alt={listing.title ?? "Listing image"}
-                      className="rm-listingImage"
-                    />
-                  </div>
-                ) : null}
-
-                <div>
                   <div style={{ fontSize: 18, fontWeight: 900 }}>
                     {listing.title}
                   </div>
@@ -167,24 +129,54 @@ export default async function CategoryPage({ params }: Props) {
                       ""
                     )}
                   </p>
-
-                  {formatPrice(listing) ? (
-                    <div style={{ marginTop: 14, marginBottom: 18 }}>
-                      <span className="rm-pill">{formatPrice(listing)}</span>
-                    </div>
-                  ) : null}
                 </div>
 
-                <a
-                  className="rm-cta"
-                  href={`/listing/${listing.id}`}
-                  style={{
-                    background: "#ED1C24",
-                    border: "0px solid #111111",
-                  }}
-                >
-                  View Details
-                </a>
+                <div>
+                  <div
+                    style={{
+                      marginTop: 14,
+                      marginBottom: 18,
+                      display: "flex",
+                      gap: 10,
+                      flexWrap: "wrap",
+                      alignItems: "center",
+                    }}
+                  >
+                    {priceText ? (
+                      <span className="rm-pill">{priceText}</span>
+                    ) : null}
+
+                    <span className="rm-pill" style={{ gap: 6 }}>
+                      <span
+                        style={{
+                          color: "#f59e0b",
+                          fontSize: 15,
+                          letterSpacing: 1,
+                          fontWeight: 900,
+                        }}
+                      >
+                        {renderStars(averageRating)}
+                      </span>
+
+                      <span>
+                        {averageRating != null
+                          ? `${averageRating}/5 (${reviewCount})`
+                          : "No reviews"}
+                      </span>
+                    </span>
+                  </div>
+
+                  <a
+                    className="rm-cta"
+                    href={`/listing/${listing.id}`}
+                    style={{
+                      background: "#ED1C24",
+                      border: "0px solid #111111",
+                    }}
+                  >
+                    View Details
+                  </a>
+                </div>
               </div>
             );
           })
