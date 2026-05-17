@@ -115,16 +115,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </>
           ) : (
             <>
-              <div className="rm-desktopOnly rm-muted" style={{ fontWeight: 900 }}>
-                Signed in: {userEmail}
-              </div>
-
-              <span className="rm-pill rm-desktopOnly">
-                {(role ?? "customer").toUpperCase()}
-              </span>
-
-              <span className="rm-pill rm-mobileSignedIn">
-                Signed in as {roleLabel(role)}
+              <span className="rm-pill">
+                {roleLabel(role)}
               </span>
 
               <a className="rm-btn rm-btnGhost rm-desktopOnly" href="/account/orders">My Orders</a>
