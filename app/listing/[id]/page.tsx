@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseclient";
 import AuthGate from "./AuthGate";
+import Link from "next/link";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -35,6 +36,23 @@ export default async function ListingDetailPage({ params }: Props) {
 
   const hasContactInfo =
     listing.contact_email || listing.contact_phone || listing.website_url;
+
+  const { data: ratingSummary } = await supabase
+    .from("vendor_rating_summary")
+    .select("*")
+    .eq("vendor_id", listing.vendor_id)
+    .single();
+
+  const averageRating = ratingSummary?.average_rating ?? null;
+  const reviewCount = ratingSummary?.review_count ?? 0;
+
+  function renderStars(rating: number | null) {
+    if (rating == null) return "☆☆☆☆☆";
+
+    const rounded = Math.round(rating);
+
+    return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+  }
 
   return (
     <AuthGate>
@@ -128,10 +146,46 @@ export default async function ListingDetailPage({ params }: Props) {
             <span className="rm-pill">{listing.category_slug}</span>
           ) : null}
 
-          {listing.status ? <span className="rm-pill">{listing.status}</span> : null}
+          {listing.status ? (
+            <span className="rm-pill">{listing.status}</span>
+          ) : null}
 
           {listing.vendor_name ? (
-            <span className="rm-pill">{listing.vendor_name}</span>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                flexWrap: "wrap",
+              }}
+            >
+              <span className="rm-pill">{listing.vendor_name}</span>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  fontWeight: 800,
+                }}
+              >
+                <span
+                  style={{
+                    color: "#f59e0b",
+                    fontSize: 18,
+                    letterSpacing: 1,
+                  }}
+                >
+                  {renderStars(averageRating)}
+                </span>
+
+                <span className="rm-muted">
+                  {averageRating != null
+                    ? `${averageRating}/5 (${reviewCount})`
+                    : "No reviews"}
+                </span>
+              </div>
+            </div>
           ) : null}
         </div>
 
@@ -178,6 +232,37 @@ export default async function ListingDetailPage({ params }: Props) {
             ) : null}
           </div>
         ) : null}
+
+        <div
+          className="rm-card"
+          style={{
+            marginTop: 18,
+            minHeight: "unset",
+            boxShadow: "none",
+            background: "#f9fafb",
+          }}
+        >
+          <h2 style={{ fontSize: 20, fontWeight: 900, marginBottom: 10 }}>
+            Vendor Reviews
+          </h2>
+
+          <p className="rm-muted" style={{ marginBottom: 12 }}>
+            Leave a rating for this vendor. Ratings apply to all listings from
+            this vendor.
+          </p>
+
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            {[1, 2, 3, 4, 5].map((r) => (
+              <Link
+                key={r}
+                href={`/review/${listing.vendor_id}?rating=${r}`}
+                className="rm-btn rm-btnGhost"
+              >
+                {"★".repeat(r)}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <div style={{ marginTop: 18 }}>
           <h2 style={{ fontSize: 20, fontWeight: 900, marginBottom: 10 }}>
