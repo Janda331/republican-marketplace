@@ -100,9 +100,7 @@ export default async function Home() {
               textAlign: "center",
             }}
           >
-            Find trusted campaign vendors, political consultants, media teams,
-            printing services, canvassing support, digital advertising help, and
-            other Republican campaign services in one place.
+            A Marketplace of free exchange where Political Campaigns of any size can find services 
           </p>
 
           <div
@@ -126,7 +124,7 @@ export default async function Home() {
       </section>
 
       <div style={{ marginBottom: 14 }}>
-        <h2 style={{ fontSize: 24, fontWeight: 900, marginBottom: 6 }}>
+        <h2 style={{justifyContent: "center", fontSize: 24, fontWeight: 900, marginBottom: 6 }}>
           Featured Services
         </h2>
         <p className="rm-muted">
