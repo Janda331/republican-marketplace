@@ -92,25 +92,40 @@ export default async function CategoryPage({ params }: Props) {
 
                 <div
                   style={{
-                    textAlign: "center",
-                    marginBottom: 12,
+                    marginTop: 14,
+                    marginBottom: 18,
+                    display: "flex",
+                    gap: 10,
+                    flexWrap: "wrap",
+                    alignItems: "center",
                   }}
                 >
+                  {formatPrice(listing) ? (
+                    <span className="rm-pill">{formatPrice(listing)}</span>
+                  ) : null}
+
                   <span
+                    className="rm-pill"
                     style={{
-                      color: "#f59e0b",
-                      fontSize: 18,
-                      letterSpacing: 1,
-                      fontWeight: 900,
+                      gap: 6,
                     }}
                   >
-                    {renderStars(averageRating)}
-                  </span>
+                    <span
+                      style={{
+                        color: "#f59e0b",
+                        fontSize: 15,
+                        letterSpacing: 1,
+                        fontWeight: 900,
+                      }}
+                    >
+                      {renderStars(averageRating)}
+                    </span>
 
-                  <span className="rm-muted" style={{ marginLeft: 6 }}>
-                    {averageRating != null
-                      ? `${averageRating}/5 (${reviewCount})`
-                      : "No reviews"}
+                    <span>
+                      {averageRating != null
+                        ? `${averageRating}/5 (${reviewCount})`
+                        : "No reviews"}
+                    </span>
                   </span>
                 </div>
 
