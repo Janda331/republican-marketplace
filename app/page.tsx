@@ -123,8 +123,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <div style={{ marginBottom: 14 }}>
-        <h2 style={{justifyContent: "center", fontSize: 24, fontWeight: 900, marginBottom: 6 }}>
+      <div style={{textAlign: "center", marginBottom: 14 }}>
+        <h2 style={{textAlign: "center", fontSize: 24, fontWeight: 900, marginBottom: 6 }}>
           Featured Services
         </h2>
         <p className="rm-muted">
