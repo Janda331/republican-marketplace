@@ -131,9 +131,9 @@ export default async function CategoryPage({ params }: Props) {
 
                   <p className="rm-muted" style={{ marginTop: 10, lineHeight: 1.6 }}>
                     {listing.description ? (
-                      listing.description.length > 300 ? (
+                      listing.description.length > 200 ? (
                         <>
-                          {listing.description.slice(0, 300)}
+                          {listing.description.slice(0, 200)}
                           <span
                             style={{
                               color: "#6b7280",
