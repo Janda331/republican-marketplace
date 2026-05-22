@@ -309,6 +309,48 @@ export default function VendorPage() {
             onChange={(e) => setWebsiteUrl(e.target.value)}
           />
 
+          <div>
+            <input
+              className="rm-input"
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0] ?? null;
+                setImageFile(file);
+
+                if (imagePreview) {
+                  URL.revokeObjectURL(imagePreview);
+                }
+
+                if (file) {
+                  setImagePreview(URL.createObjectURL(file));
+                } else {
+                  setImagePreview(null);
+                }
+              }}
+            />
+
+            <div className="rm-imageHelp" style={{ marginTop: 8 }}>
+              Preview below shows how your image will appear. Wide landscape images work best.
+            </div>
+
+            {imagePreview ? (
+              <div
+                className="rm-listingImageFrame"
+                style={{
+                  marginTop: 12,
+                  maxWidth: 420,
+                }}
+              >
+                <img
+                  src={imagePreview}
+                  alt="Listing preview"
+                  className="rm-listingImage"
+                />
+              </div>
+            ) : null}
+          </div>
+
           <textarea
             className="rm-input"
             placeholder="Description"
